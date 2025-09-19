@@ -1628,6 +1628,64 @@ G2L["be"]["Name"] = [[fingerprint]];
 G2L["be"]["Position"] = UDim2.new(0.93556, 0, 0, 0);
 
 
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2
+G2L["bf"] = Instance.new("TextButton", G2L["46"]);
+G2L["bf"]["TextWrapped"] = true;
+G2L["bf"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+G2L["bf"]["BorderSizePixel"] = 0;
+G2L["bf"]["TextColor3"] = Color3.fromRGB(240, 240, 240);
+G2L["bf"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["bf"]["TextSize"] = 14;
+G2L["bf"]["TextScaled"] = true;
+G2L["bf"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["bf"]["FontFace"] = Font.new([[rbxasset://fonts/families/ComicNeueAngular.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["bf"]["Size"] = UDim2.new(0.71832, 0, 0.08816, 0);
+G2L["bf"]["Name"] = [[rope2]];
+G2L["bf"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["bf"]["Text"] = [[Remove Rope]];
+G2L["bf"]["Visible"] = false;
+G2L["bf"]["Position"] = UDim2.new(0.13113, 0, 0.30978, 0);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.soundclick
+G2L["c0"] = Instance.new("LocalScript", G2L["bf"]);
+G2L["c0"]["Name"] = [[soundclick]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.realone
+G2L["c1"] = Instance.new("LocalScript", G2L["bf"]);
+G2L["c1"]["Name"] = [[realone]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.UICorner
+G2L["c2"] = Instance.new("UICorner", G2L["bf"]);
+G2L["c2"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.UIStroke
+G2L["c3"] = Instance.new("UIStroke", G2L["bf"]);
+G2L["c3"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+G2L["c3"]["Thickness"] = 1.7;
+G2L["c3"]["Color"] = Color3.fromRGB(155, 155, 155);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.UIPadding
+G2L["c4"] = Instance.new("UIPadding", G2L["bf"]);
+G2L["c4"]["PaddingLeft"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.fingerprint
+G2L["c5"] = Instance.new("ImageLabel", G2L["bf"]);
+G2L["c5"]["BorderSizePixel"] = 0;
+G2L["c5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["c5"]["Image"] = [[rbxassetid://8903957093]];
+G2L["c5"]["Size"] = UDim2.new(0.13501, 0, 0.9265, 0);
+G2L["c5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["c5"]["BackgroundTransparency"] = 1;
+G2L["c5"]["Name"] = [[fingerprint]];
+G2L["c5"]["Position"] = UDim2.new(0.8639, 0, 0.05474, 0);
+
+
 -- StarterGui.omarInkGame.Controls
 local function C_2()
 local script = G2L["2"];
@@ -2390,6 +2448,7 @@ local script = G2L["48"];
 	local six1    = gui:WaitForChild("six1")
 	local seven1  = gui:WaitForChild("seven1")
 	local rope1   = gui:WaitForChild("rope1")
+	local rope2   = gui:WaitForChild("rope2") -- NEW
 	
 	-- Red / Blue buttons
 	local red2    = gui:WaitForChild("red2")
@@ -2427,6 +2486,7 @@ local script = G2L["48"];
 		six1.Visible    = false
 		seven1.Visible  = false
 		rope1.Visible   = false
+		rope2.Visible   = false
 		red2.Visible, red3.Visible, red4.Visible = false, false, false
 		blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = false, false, false, false
 	end
@@ -2524,6 +2584,7 @@ local script = G2L["48"];
 	
 		elseif v == "JumpRope" then
 			rope1.Visible = true
+			rope2.Visible = true -- NEW
 		end
 	end
 	
@@ -3769,5 +3830,43 @@ local script = G2L["ba"];
 	
 end;
 task.spawn(C_ba);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.soundclick
+local function C_c0()
+local script = G2L["c0"];
+	local btn = script.Parent
+	local soundService = game:GetService("SoundService")
+	
+	-- Click sound asset ID
+	local clickSound = Instance.new("Sound")
+	clickSound.SoundId = "rbxassetid://1673280232"  -- Your click sound asset ID
+	clickSound.Parent = btn  -- Set the sound as a child of the button
+	
+	-- Play click sound when button is clicked
+	btn.MouseButton1Click:Connect(function()
+		-- Play the sound
+		clickSound:Play()
+	end)
+	
+end;
+task.spawn(C_c0);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.rope2.realone
+local function C_c1()
+local script = G2L["c1"];
+	-- LocalScript (place inside the TextButton)
+	local button = script.Parent
+	
+	button.MouseButton1Click:Connect(function()
+		local effects = workspace:FindFirstChild("Effects")
+		if not effects then return end
+	
+		local rope = effects:FindFirstChild("rope")
+		if rope then
+			-- This destroys the rope on the client only (does NOT replicate to the server)
+			rope:Destroy()
+		end
+	end)
+	
+end;
+task.spawn(C_c1);
 
 return G2L["1"], require;
