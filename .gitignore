@@ -8,7 +8,6 @@ G2L["1"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 G2L["1"].ResetOnSpawn = false
 
 
-
 -- StarterGui.omarInkGame.Controls
 G2L["2"] = Instance.new("LocalScript", G2L["1"]);
 G2L["2"]["Name"] = [[Controls]];
@@ -820,7 +819,6 @@ G2L["5e"]["Position"] = UDim2.new(0.07297, 0, 0.02528, 0);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.help1
 G2L["5f"] = Instance.new("TextBox", G2L["46"]);
 G2L["5f"]["Visible"] = false;
-G2L["5f"]["CursorPosition"] = -1;
 G2L["5f"]["Name"] = [[help1]];
 G2L["5f"]["PlaceholderColor3"] = Color3.fromRGB(194, 0, 0);
 G2L["5f"]["BorderSizePixel"] = 0;
@@ -2435,6 +2433,7 @@ local script = G2L["48"];
 	
 	-- Waiting animation control
 	local isWaiting, animConn = false, nil
+	local originalColor = chooserLabel.TextColor3
 	
 	local function startWaitingAnimation()
 		if isWaiting then return end
@@ -2458,14 +2457,13 @@ local script = G2L["48"];
 		end
 	end
 	
-	-- Main UI update
+	-- Update UI depending on game value and vest
 	local function updateUI()
-		local v = gameValue.Value or ""
-	
-		-- always reset UI
 		hideAll()
 	
-		-- Check vest every time
+		local v = gameValue.Value or ""
+	
+		-- Check vest
 		local liveFolder = workspace:FindFirstChild("Live")
 		local myModel = liveFolder and liveFolder:FindFirstChild(player.Name)
 		local vestShown = false
@@ -2484,13 +2482,14 @@ local script = G2L["48"];
 			end
 		end
 	
-		-- If vest was found, stop here
 		if vestShown then
 			stopWaitingAnimation()
 			return
+		else
+			chooserLabel.TextColor3 = originalColor -- reset back to original
 		end
 	
-		-- No vest → show gamemode / waiting
+		-- Handle game modes
 		if not validModes[v] then
 			stopWaitingAnimation()
 			startWaitingAnimation()
@@ -2528,11 +2527,12 @@ local script = G2L["48"];
 		end
 	end
 	
-	-- Connect change listener
+	-- Listeners
 	gameValue:GetPropertyChangedSignal("Value"):Connect(updateUI)
 	
-	-- Keep checking for vest changes too
-	RunService.Heartbeat:Connect(updateUI)
+	local liveFolder = workspace:WaitForChild("Live")
+	liveFolder.ChildAdded:Connect(updateUI)
+	liveFolder.ChildRemoved:Connect(updateUI)
 	
 	-- Initial call
 	updateUI()
