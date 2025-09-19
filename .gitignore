@@ -654,7 +654,7 @@ G2L["49"]["Name"] = [[blue1]];
 G2L["49"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["49"]["Text"] = [[Go safe Place]];
 G2L["49"]["Visible"] = false;
-G2L["49"]["Position"] = UDim2.new(0.1339, 0, 0.32873, 0);
+G2L["49"]["Position"] = UDim2.new(0.13743, 0, 0.26522, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.blue1.soundclick
@@ -700,7 +700,7 @@ G2L["4f"]["Name"] = [[blue2]];
 G2L["4f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["4f"]["Text"] = [[Esp Red Team]];
 G2L["4f"]["Visible"] = false;
-G2L["4f"]["Position"] = UDim2.new(0.1339, 0, 0.47685, 0);
+G2L["4f"]["Position"] = UDim2.new(0.13743, 0, 0.41334, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.blue2.soundclick
@@ -1436,7 +1436,7 @@ G2L["a5"]["Name"] = [[blue3]];
 G2L["a5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["a5"]["Text"] = [[inf stamina]];
 G2L["a5"]["Visible"] = false;
-G2L["a5"]["Position"] = UDim2.new(0.13957, 0, 0.59642, 0);
+G2L["a5"]["Position"] = UDim2.new(0.13605, 0, 0.65199, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.blue3.soundclick
@@ -1464,6 +1464,110 @@ G2L["a9"]["Color"] = Color3.fromRGB(155, 155, 155);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.blue3.UIPadding
 G2L["aa"] = Instance.new("UIPadding", G2L["a5"]);
 G2L["aa"]["PaddingLeft"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4
+G2L["ab"] = Instance.new("TextButton", G2L["46"]);
+G2L["ab"]["TextWrapped"] = true;
+G2L["ab"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+G2L["ab"]["BorderSizePixel"] = 0;
+G2L["ab"]["TextColor3"] = Color3.fromRGB(240, 240, 240);
+G2L["ab"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["ab"]["TextSize"] = 14;
+G2L["ab"]["TextScaled"] = true;
+G2L["ab"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["ab"]["FontFace"] = Font.new([[rbxasset://fonts/families/ComicNeueAngular.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["ab"]["Size"] = UDim2.new(0.71832, 0, 0.0941, 0);
+G2L["ab"]["Name"] = [[blue4]];
+G2L["ab"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["ab"]["Text"] = [[Esp Exit Door]];
+G2L["ab"]["Visible"] = false;
+G2L["ab"]["Position"] = UDim2.new(0.13743, 0, 0.53243, 0);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.soundclick
+G2L["ac"] = Instance.new("LocalScript", G2L["ab"]);
+G2L["ac"]["Name"] = [[soundclick]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.realone
+G2L["ad"] = Instance.new("LocalScript", G2L["ab"]);
+G2L["ad"]["Name"] = [[realone]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.UICorner
+G2L["ae"] = Instance.new("UICorner", G2L["ab"]);
+G2L["ae"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.UIStroke
+G2L["af"] = Instance.new("UIStroke", G2L["ab"]);
+G2L["af"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+G2L["af"]["Thickness"] = 1.7;
+G2L["af"]["Color"] = Color3.fromRGB(155, 155, 155);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.UIPadding
+G2L["b0"] = Instance.new("UIPadding", G2L["ab"]);
+G2L["b0"]["PaddingLeft"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1
+G2L["b1"] = Instance.new("TextButton", G2L["46"]);
+G2L["b1"]["TextWrapped"] = true;
+G2L["b1"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+G2L["b1"]["BorderSizePixel"] = 0;
+G2L["b1"]["TextColor3"] = Color3.fromRGB(240, 240, 240);
+G2L["b1"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["b1"]["TextSize"] = 14;
+G2L["b1"]["TextScaled"] = true;
+G2L["b1"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["b1"]["FontFace"] = Font.new([[rbxasset://fonts/families/ComicNeueAngular.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["b1"]["Size"] = UDim2.new(0.71832, 0, 0.08816, 0);
+G2L["b1"]["Name"] = [[seven1]];
+G2L["b1"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["b1"]["Text"] = [[Teleport To the End]];
+G2L["b1"]["Visible"] = false;
+G2L["b1"]["Position"] = UDim2.new(0.1339, 0, 0.17856, 0);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.soundclick
+G2L["b2"] = Instance.new("LocalScript", G2L["b1"]);
+G2L["b2"]["Name"] = [[soundclick]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.realone
+G2L["b3"] = Instance.new("LocalScript", G2L["b1"]);
+G2L["b3"]["Name"] = [[realone]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.UICorner
+G2L["b4"] = Instance.new("UICorner", G2L["b1"]);
+G2L["b4"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.UIStroke
+G2L["b5"] = Instance.new("UIStroke", G2L["b1"]);
+G2L["b5"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+G2L["b5"]["Thickness"] = 1.7;
+G2L["b5"]["Color"] = Color3.fromRGB(155, 155, 155);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.UIPadding
+G2L["b6"] = Instance.new("UIPadding", G2L["b1"]);
+G2L["b6"]["PaddingLeft"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.fingerprint
+G2L["b7"] = Instance.new("ImageLabel", G2L["b1"]);
+G2L["b7"]["BorderSizePixel"] = 0;
+G2L["b7"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["b7"]["Image"] = [[rbxassetid://8903957093]];
+G2L["b7"]["Size"] = UDim2.new(0.10287, 0, 0.9265, 0);
+G2L["b7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["b7"]["BackgroundTransparency"] = 1;
+G2L["b7"]["Name"] = [[fingerprint]];
+G2L["b7"]["Position"] = UDim2.new(0.89603, 0, 0.05474, 0);
 
 
 -- StarterGui.omarInkGame.Controls
@@ -2206,229 +2310,158 @@ local script = G2L["48"];
 	-- LocalScript inside MainFrame
 	
 	local RunService = game:GetService("RunService")
-	local Players = game:GetService("Players")
-	local player = Players.LocalPlayer
-	local gui = script.Parent -- MainFrame
 	
-	-- Helper to safely get UI objects (may be nil)
-	local function G(name)
-		return gui:FindFirstChild(name)
-	end
+	local gui = script.Parent  -- MainFrame
 	
-	-- UI references (may be missing in some setups; we handle nil)
-	local chooserLabel = G("Chooser")
-	local firstBtn1 = G("first1")
-	local firstBtn2 = G("first2")
-	local firstBtn3 = G("first3")
-	local help1 = G("help1")
-	local second1 = G("second1")
-	local third1 = G("third1")
-	local third2 = G("third2")
-	local four1 = G("four1")
-	local five1 = G("five1")
-	local five2 = G("five2")
-	local five3 = G("five3")
-	local six1 = G("six1")
-	local seven1 = G("seven1")
-	local red2 = G("red2")
-	local red3 = G("red3")
-	local red4 = G("red4")
-	local blue1 = G("blue1")
-	local blue2 = G("blue2")
-	local blue3 = G("blue3")
-	-- TextLabel specifically requested earlier (support either separate label or first1 being a TextLabel)
-	local firstTextLabel = G("first1Label") or (firstBtn1 and firstBtn1:IsA("TextLabel") and firstBtn1) or nil
+	-- UI references
+	local chooserLabel = gui:WaitForChild("Chooser")
+	local first1 = gui:WaitForChild("first1") -- TextLabel
+	local first2 = gui:WaitForChild("first2")
+	local first3 = gui:WaitForChild("first3")
+	local help1  = gui:WaitForChild("help1")
+	local second1 = gui:WaitForChild("second1")
+	local third1  = gui:WaitForChild("third1")
+	local third2  = gui:WaitForChild("third2")
+	local four1   = gui:WaitForChild("four1")
+	local five1   = gui:WaitForChild("five1")
+	local five2   = gui:WaitForChild("five2")
+	local five3   = gui:WaitForChild("five3")
+	local six1    = gui:WaitForChild("six1")
+	local seven1  = gui:WaitForChild("seven1")
 	
-	-- value source (try to get it reliably)
-	local valuesFolder = workspace:FindFirstChild("Values")
-	local gameValueObj = valuesFolder and valuesFolder:FindFirstChild("CurrentGame")
-	if not gameValueObj then
-		local ok, v = pcall(function() return workspace:WaitForChild("Values", 3) end)
-		if ok and v then
-			gameValueObj = v:FindFirstChild("CurrentGame") or v:WaitForChild("CurrentGame", 3)
-		end
-	end
+	-- Red/Blue buttons
+	local red2  = gui:WaitForChild("red2")
+	local red3  = gui:WaitForChild("red3")
+	local red4  = gui:WaitForChild("red4")
+	local blue1 = gui:WaitForChild("blue1")
+	local blue2 = gui:WaitForChild("blue2")
+	local blue3 = gui:WaitForChild("blue3")
+	local blue4 = gui:WaitForChild("blue4")
 	
-	-- valid modes
+	-- Value to track
+	local gameValue = workspace:WaitForChild("Values"):WaitForChild("CurrentGame")
+	local liveFolder = workspace:WaitForChild("Live")
+	
+	-- List of valid modes
 	local validModes = {
 		RedLightGreenLight = true,
-		Dalgona = true,
-		LightsOut = true,
-		TugOfWar = true,
-		GlassBridge = true,
-		Mingle = true,
-		HideAndSeek = true,
+		Dalgona            = true,
+		LightsOut          = true,
+		TugOfWar           = true,
+		GlassBridge        = true,
+		Mingle             = true,
+		HideAndSeek        = true,
+		JumpRope           = true,
 	}
 	
-	-- state
-	local isWaiting = false
-	local animConn = nil
-	local liveListeners = {}
-	
-	-- helpers
-	local function show(obj)
-		if obj and obj:IsA("GuiObject") then obj.Visible = true end
-	end
-	local function hide(obj)
-		if obj and obj:IsA("GuiObject") then obj.Visible = false end
-	end
-	
+	-- Utility to hide everything (Chooser stays visible!)
 	local function hideAll()
-		-- NOTE: chooserLabel intentionally NOT hidden here so it remains visible
-		local list = {
-			firstBtn1, firstBtn2, firstBtn3, firstTextLabel, help1,
-			second1, third1, third2, four1,
-			five1, five2, five3, six1,
-			seven1, red2, red3, red4, blue1, blue2, blue3
-		}
-		for _, o in ipairs(list) do
-			if o and o:IsA("GuiObject") then o.Visible = false end
-		end
+		first1.Visible = false
+		first2.Visible, first3.Visible = false, false
+		help1.Visible   = false
+		second1.Visible = false
+		third1.Visible, third2.Visible = false, false
+		four1.Visible   = false
+		five1.Visible, five2.Visible, five3.Visible = false, false, false
+		six1.Visible    = false
+		seven1.Visible  = false
+		red2.Visible, red3.Visible, red4.Visible = false, false, false
+		blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = false, false, false, false
 	end
 	
-	-- waiting animation (cycles ".", "..", "...")
-	local function startWaiting()
+	-- Waiting animation control
+	local isWaiting, animConn = false, nil
+	local function startWaitingAnimation()
 		if isWaiting then return end
 		isWaiting = true
-		if chooserLabel and chooserLabel:IsA("GuiObject") then
-			chooserLabel.Visible = true
-			chooserLabel.Text = "Waiting for gamemode"
-		end
 		animConn = RunService.Heartbeat:Connect(function()
 			if not isWaiting then
-				if animConn then animConn:Disconnect() animConn = nil end
+				animConn:Disconnect()
 				return
 			end
-			if not chooserLabel then return end
 			local dots = (math.floor(tick() * 2) % 3) + 1
 			chooserLabel.Text = "Waiting for gamemode" .. string.rep(".", dots)
 		end)
 	end
-	
-	local function stopWaiting()
+	local function stopWaitingAnimation()
 		if not isWaiting then return end
 		isWaiting = false
-		if animConn then animConn:Disconnect() animConn = nil end
-	end
-	
-	-- Vest detection & listeners for HideAndSeek
-	local function clearLiveListeners()
-		for _, c in ipairs(liveListeners) do
-			pcall(function() c:Disconnect() end)
-		end
-		liveListeners = {}
-	end
-	
-	local function detectVestForPlayer()
-		-- hide vest UI first
-		hide(seven1)
-		hide(red2); hide(red3); hide(red4)
-		hide(blue1); hide(blue2); hide(blue3)
-	
-		local liveFolder = workspace:FindFirstChild("Live")
-		if not liveFolder then return end
-		local model = liveFolder:FindFirstChild(player.Name)
-		if not model then return end
-	
-		if model:FindFirstChild("RedVest") then
-			if seven1 then
-				seven1.Text = "Team is Red"
-				seven1.TextColor3 = Color3.fromRGB(255,0,0)
-				show(seven1)
-			end
-			show(red2); show(red3); show(red4)
-		elseif model:FindFirstChild("BlueVest") then
-			if seven1 then
-				seven1.Text = "Team is Blue"
-				seven1.TextColor3 = Color3.fromRGB(0,0,255)
-				show(seven1)
-			end
-			show(blue1); show(blue2); show(blue3)
+		if animConn then
+			animConn:Disconnect()
+			animConn = nil
 		end
 	end
 	
-	local function startLiveWatch()
-		clearLiveListeners()
-		local liveFolder = workspace:FindFirstChild("Live")
-		if not liveFolder then return end
+	-- Check for RedVest or BlueVest
+	local function checkVest()
+		local playerModel = liveFolder:FindFirstChild(game.Players.LocalPlayer.Name)
+		if not playerModel then return end
 	
-		table.insert(liveListeners, liveFolder.ChildAdded:Connect(function(child)
-			if child.Name == player.Name then
-				detectVestForPlayer()
-				local model = child
-				table.insert(liveListeners, model.ChildAdded:Connect(function() detectVestForPlayer() end))
-				table.insert(liveListeners, model.ChildRemoved:Connect(function() detectVestForPlayer() end))
-			end
-		end))
+		local redVest = playerModel:FindFirstChild("RedVest")
+		local blueVest = playerModel:FindFirstChild("BlueVest")
 	
-		table.insert(liveListeners, liveFolder.ChildRemoved:Connect(function(child)
-			if child.Name == player.Name then
-				detectVestForPlayer()
-			end
-		end))
-	
-		local existingModel = liveFolder:FindFirstChild(player.Name)
-		if existingModel then
-			table.insert(liveListeners, existingModel.ChildAdded:Connect(function() detectVestForPlayer() end))
-			table.insert(liveListeners, existingModel.ChildRemoved:Connect(function() detectVestForPlayer() end))
+		if redVest then
+			seven1.Text = "Team is Red"
+			seven1.TextColor3 = Color3.fromRGB(255, 0, 0)
+			seven1.Visible = true
+			red2.Visible, red3.Visible, red4.Visible = true, true, true
+		elseif blueVest then
+			seven1.Text = "Team is Blue"
+			seven1.TextColor3 = Color3.fromRGB(0, 0, 255)
+			seven1.Visible = true
+			blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = true, true, true, true
 		end
 	end
 	
-	-- main update
+	-- Main UI update
 	local function updateUI()
-		local v = (gameValueObj and gameValueObj.Value) or ""
-	
-		stopWaiting()
-		hideAll()
-	
-		-- always ensure chooser remains visible
-		if chooserLabel and chooserLabel:IsA("GuiObject") then chooserLabel.Visible = true end
+		local v = gameValue.Value or ""
 	
 		if not validModes[v] then
-			startWaiting()
-			clearLiveListeners()
+			hideAll()
+			stopWaitingAnimation()
+			chooserLabel.Text = "Waiting for gamemode"
+			startWaitingAnimation()
 			return
 		end
 	
-		stopWaiting()
-		if chooserLabel and chooserLabel:IsA("GuiObject") then chooserLabel.Text = v end
+		stopWaitingAnimation()
+		chooserLabel.Text = v
+		hideAll()
 	
 		if v == "RedLightGreenLight" then
-			show(firstBtn1); show(firstBtn2); show(firstBtn3); show(help1); show(firstTextLabel)
-			clearLiveListeners()
+			first1.Visible = true -- TextLabel
+			first2.Visible, first3.Visible = true, true
+			help1.Visible = true
+	
 		elseif v == "Dalgona" then
-			show(second1); clearLiveListeners()
+			second1.Visible = true
+	
 		elseif v == "LightsOut" then
-			show(third1); show(third2); clearLiveListeners()
+			third1.Visible, third2.Visible = true, true
+	
 		elseif v == "TugOfWar" then
-			show(four1); clearLiveListeners()
+			four1.Visible = true
+	
 		elseif v == "GlassBridge" then
-			show(five1); show(five2); show(five3); clearLiveListeners()
+			five1.Visible, five2.Visible, five3.Visible = true, true, true
+	
 		elseif v == "Mingle" then
-			show(six1); clearLiveListeners()
+			six1.Visible = true
+	
 		elseif v == "HideAndSeek" then
-			detectVestForPlayer(); startLiveWatch()
-		else
-			clearLiveListeners()
+			seven1.Visible = true
+			checkVest()
+	
+		elseif v == "JumpRope" then
+			seven1.Visible = true
 		end
 	end
 	
-	-- connect and init
-	if gameValueObj then
-		gameValueObj:GetPropertyChangedSignal("Value"):Connect(updateUI)
-	else
-		workspace.ChildAdded:Connect(function(c)
-			if c.Name == "Values" and not gameValueObj then
-				local ok, val = pcall(function() return c:WaitForChild("CurrentGame", 5) end)
-				if ok and val then
-					gameValueObj = val
-					gameValueObj:GetPropertyChangedSignal("Value"):Connect(updateUI)
-					updateUI()
-				end
-			end
-		end)
-	end
+	-- Connect change listener
+	gameValue:GetPropertyChangedSignal("Value"):Connect(updateUI)
 	
+	-- Initial call
 	updateUI()
 	
 end;
@@ -3400,5 +3433,223 @@ local script = G2L["a7"];
 	
 end;
 task.spawn(C_a7);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.soundclick
+local function C_ac()
+local script = G2L["ac"];
+	local btn = script.Parent
+	local soundService = game:GetService("SoundService")
+	
+	-- Click sound asset ID
+	local clickSound = Instance.new("Sound")
+	clickSound.SoundId = "rbxassetid://1673280232"  -- Your click sound asset ID
+	clickSound.Parent = btn  -- Set the sound as a child of the button
+	
+	-- Play click sound when button is clicked
+	btn.MouseButton1Click:Connect(function()
+		-- Play the sound
+		clickSound:Play()
+	end)
+	
+end;
+task.spawn(C_ac);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.realone
+local function C_ad()
+local script = G2L["ad"];
+	-- LocalScript (place inside your TextButton)
+	local button = script.Parent
+	local uiStroke = button:WaitForChild("UIStroke")
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
+	local workspace = game:GetService("Workspace")
+	
+	-- store original color so we can revert
+	local originalColor = uiStroke.Color
+	local onColor = Color3.fromRGB(0, 255, 0) -- green for ON
+	
+	local active = false
+	local highlights = {}        -- [model] = highlightInstance
+	local modelConnections = {}  -- [model] = connection (AncestryChanged)
+	local folderConnections = {} -- connections to folder.ChildAdded (so we can disconnect on OFF)
+	
+	-- safely get folders (will yield until they exist)
+	local function getExitFolders()
+		local map = workspace:WaitForChild("HideAndSeekMap")
+		local fixed = map:WaitForChild("NEWFIXEDDOORS")
+		local f1 = fixed:WaitForChild("Floor1"):WaitForChild("EXITDOORS")
+		local f2 = fixed:WaitForChild("Floor2"):WaitForChild("EXITDOORS")
+		local f3 = fixed:WaitForChild("Floor3"):WaitForChild("EXITDOORS")
+		return {f1, f2, f3}
+	end
+	
+	-- create highlight for a model if not already present
+	local function createHighlightForModel(model)
+		if not model or not model:IsA("Model") then return end
+		if highlights[model] then return end
+	
+		-- check for ExitSign somewhere inside this model (recursive)
+		local sign = model:FindFirstChild("ExitSign", true)
+		if not sign then return end
+	
+		local hl = Instance.new("Highlight")
+		hl.Adornee = model
+		hl.FillColor = onColor
+		hl.OutlineColor = onColor
+		-- optionally adjust transparency / other properties:
+		hl.FillTransparency = 0.65
+		hl.OutlineTransparency = 0
+		hl.Parent = model  -- client-side highlight parented to model
+	
+		highlights[model] = hl
+	
+		-- remove highlight if the model is removed from the world
+		local conn
+		conn = model.AncestryChanged:Connect(function(_, parent)
+			if not model:IsDescendantOf(workspace) then
+				if highlights[model] then
+					highlights[model]:Destroy()
+					highlights[model] = nil
+				end
+				if conn then conn:Disconnect() end
+				modelConnections[model] = nil
+			end
+		end)
+		modelConnections[model] = conn
+	end
+	
+	-- remove highlight for a model
+	local function removeHighlightForModel(model)
+		if highlights[model] then
+			pcall(function() highlights[model]:Destroy() end)
+			highlights[model] = nil
+		end
+		if modelConnections[model] then
+			pcall(function() modelConnections[model]:Disconnect() end)
+			modelConnections[model] = nil
+		end
+	end
+	
+	-- search all models currently in the folders and create highlights
+	local function scanAndHighlightAll()
+		local folders = getExitFolders()
+		for _, folder in ipairs(folders) do
+			for _, v in ipairs(folder:GetChildren()) do
+				-- v may be a Model or container of EXITDOOR models
+				-- if the folder contains many models called EXITDOOR, we'll iterate them
+				if v:IsA("Model") then
+					createHighlightForModel(v)
+				end
+			end
+		end
+	end
+	
+	-- start listening to folder additions so new doors will get ESP while active
+	local function startFolderListeners()
+		local folders = getExitFolders()
+		for _, folder in ipairs(folders) do
+			-- avoid creating multiple connections
+			if not folderConnections[folder] then
+				local conn = folder.ChildAdded:Connect(function(child)
+					-- small delay to let the child's descendants initialize
+					task.wait(0.05)
+					if child:IsA("Model") then
+						createHighlightForModel(child)
+					end
+				end)
+				folderConnections[folder] = conn
+			end
+		end
+	end
+	
+	local function stopFolderListeners()
+		for folder, conn in pairs(folderConnections) do
+			if conn then
+				pcall(function() conn:Disconnect() end)
+			end
+			folderConnections[folder] = nil
+		end
+	end
+	
+	-- enable ESP (client-side)
+	local function enableESP()
+		uiStroke.Color = onColor
+		active = true
+		scanAndHighlightAll()
+		startFolderListeners()
+	end
+	
+	-- disable ESP and cleanup
+	local function disableESP()
+		uiStroke.Color = originalColor
+		active = false
+	
+		-- destroy all highlights
+		for model, hl in pairs(highlights) do
+			pcall(function() hl:Destroy() end)
+			highlights[model] = nil
+		end
+	
+		-- disconnect model connections
+		for model, conn in pairs(modelConnections) do
+			pcall(function() conn:Disconnect() end)
+			modelConnections[model] = nil
+		end
+	
+		-- stop folder listeners
+		stopFolderListeners()
+	end
+	
+	-- toggle on button click
+	button.MouseButton1Click:Connect(function()
+		if active then
+			disableESP()
+		else
+			enableESP()
+		end
+	end)
+	
+	-- if anything unexpected happens (folders removed) make sure to cleanup
+	workspace.DescendantRemoving:Connect(function(desc)
+		-- if a model with a highlight is being removed, destroy its highlight (safety)
+		if highlights[desc] then
+			removeHighlightForModel(desc)
+		end
+	end)
+	
+end;
+task.spawn(C_ad);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.soundclick
+local function C_b2()
+local script = G2L["b2"];
+	local btn = script.Parent
+	local soundService = game:GetService("SoundService")
+	
+	-- Click sound asset ID
+	local clickSound = Instance.new("Sound")
+	clickSound.SoundId = "rbxassetid://1673280232"  -- Your click sound asset ID
+	clickSound.Parent = btn  -- Set the sound as a child of the button
+	
+	-- Play click sound when button is clicked
+	btn.MouseButton1Click:Connect(function()
+		-- Play the sound
+		clickSound:Play()
+	end)
+	
+end;
+task.spawn(C_b2);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.seven1.realone
+local function C_b3()
+local script = G2L["b3"];
+	local button = script.Parent
+	
+	button.MouseButton1Click:Connect(function()
+		local player = game.Players.LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	
+		humanoidRootPart.CFrame = CFrame.new(743, 197, 936)
+	end)
+	
+end;
+task.spawn(C_b3);
 
 return G2L["1"], require;
