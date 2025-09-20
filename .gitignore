@@ -1,6 +1,6 @@
 local G2L = {};
 
-
+-- CoreGui.omarInkGame
 G2L["1"] = Instance.new("ScreenGui", game:GetService("CoreGui"))
 G2L["1"].DisplayOrder = 9999
 G2L["1"].Name = "omarInkGame"
@@ -2561,7 +2561,7 @@ local script = G2L["48"];
 	
 	-- Other game UIs
 	local second1 = gui:WaitForChild("second1")
-	local second2 = gui:WaitForChild("second2") -- New Dalgona button
+	local second2 = gui:WaitForChild("second2")
 	local third1  = gui:WaitForChild("third1")
 	local third2  = gui:WaitForChild("third2")
 	local four1   = gui:WaitForChild("four1")
@@ -2655,7 +2655,7 @@ local script = G2L["48"];
 	
 		elseif v == "Dalgona" then
 			second1.Visible = true
-			second2.Visible = true -- New button
+			second2.Visible = true
 	
 		elseif v == "LightsOut" then
 			third1.Visible, third2.Visible = true, true
@@ -2670,7 +2670,7 @@ local script = G2L["48"];
 			six1.Visible = true
 	
 		elseif v == "HideAndSeek" then
-			seven1.Visible = true -- TextLabel for team info
+			seven1.Visible = true -- Always show team info if available
 	
 		elseif v == "JumpRope" then
 			rope1.Visible = true
@@ -2698,7 +2698,7 @@ local script = G2L["48"];
 		chooserLabel.TextColor3 = originalColor
 		showGameUI(v)
 	
-		-- Check for vest AFTER showing game
+		-- Check for vest and team info
 		local liveFolder = workspace:FindFirstChild("Live")
 		local myModel = liveFolder and liveFolder:FindFirstChild(player.Name)
 		if myModel then
@@ -2706,12 +2706,16 @@ local script = G2L["48"];
 				seven1.Text = "Team is Red"
 				seven1.TextColor3 = Color3.new(1,0,0)
 				seven1.Visible = true
-				red2.Visible, red3.Visible, red4.Visible = true, true, true
+				if v == "HideAndSeek" then
+					red2.Visible, red3.Visible, red4.Visible = true, true, true
+				end
 			elseif myModel:FindFirstChild("BlueVest") then
 				seven1.Text = "Team is Blue"
 				seven1.TextColor3 = Color3.new(0,0,1)
 				seven1.Visible = true
-				blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = true, true, true, true
+				if v == "HideAndSeek" then
+					blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = true, true, true, true
+				end
 			end
 		end
 	end
