@@ -1,6 +1,6 @@
 local G2L = {};
 
--- CoreGui.omarInkGame
+
 G2L["1"] = Instance.new("ScreenGui", game:GetService("CoreGui"))
 G2L["1"].DisplayOrder = 9999
 G2L["1"].Name = "omarInkGame"
@@ -939,12 +939,12 @@ G2L["6c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["6c"]["FontFace"] = Font.new([[rbxasset://fonts/families/FredokaOne.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
 G2L["6c"]["TextColor3"] = Color3.fromRGB(241, 0, 0);
 G2L["6c"]["BackgroundTransparency"] = 1;
-G2L["6c"]["Size"] = UDim2.new(0.84206, 0, 0.14957, 0);
+G2L["6c"]["Size"] = UDim2.new(0.95068, 0, 0.14957, 0);
 G2L["6c"]["Visible"] = false;
 G2L["6c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["6c"]["Text"] = [[Sorry Dalgona is not Supported]];
+G2L["6c"]["Text"] = [[when u click button there gonna be blue on cookie click it and u gonna complete the Cookie]];
 G2L["6c"]["Name"] = [[second1]];
-G2L["6c"]["Position"] = UDim2.new(0.07297, 0, 0.32901, 0);
+G2L["6c"]["Position"] = UDim2.new(0.02304, 0, 0.30568, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.third1
@@ -1745,6 +1745,64 @@ G2L["cc"]["Name"] = [[fingerprint]];
 G2L["cc"]["Position"] = UDim2.new(0.83573, 0, 0.05474, 0);
 
 
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2
+G2L["cd"] = Instance.new("TextButton", G2L["46"]);
+G2L["cd"]["TextWrapped"] = true;
+G2L["cd"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+G2L["cd"]["BorderSizePixel"] = 0;
+G2L["cd"]["TextColor3"] = Color3.fromRGB(240, 240, 240);
+G2L["cd"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["cd"]["TextSize"] = 14;
+G2L["cd"]["TextScaled"] = true;
+G2L["cd"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["cd"]["FontFace"] = Font.new([[rbxasset://fonts/families/ComicNeueAngular.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["cd"]["Size"] = UDim2.new(0.75846, 0, 0.10566, 0);
+G2L["cd"]["Name"] = [[second2]];
+G2L["cd"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["cd"]["Text"] = [[One Click Complete]];
+G2L["cd"]["Visible"] = false;
+G2L["cd"]["Position"] = UDim2.new(0.13315, 0, 0.17702, 0);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.soundclick
+G2L["ce"] = Instance.new("LocalScript", G2L["cd"]);
+G2L["ce"]["Name"] = [[soundclick]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.realone
+G2L["cf"] = Instance.new("LocalScript", G2L["cd"]);
+G2L["cf"]["Name"] = [[realone]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.UICorner
+G2L["d0"] = Instance.new("UICorner", G2L["cd"]);
+G2L["d0"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.UIStroke
+G2L["d1"] = Instance.new("UIStroke", G2L["cd"]);
+G2L["d1"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+G2L["d1"]["Thickness"] = 1.7;
+G2L["d1"]["Color"] = Color3.fromRGB(155, 155, 155);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.UIPadding
+G2L["d2"] = Instance.new("UIPadding", G2L["cd"]);
+G2L["d2"]["PaddingLeft"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.fingerprint
+G2L["d3"] = Instance.new("ImageLabel", G2L["cd"]);
+G2L["d3"]["BorderSizePixel"] = 0;
+G2L["d3"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["d3"]["Image"] = [[rbxassetid://8903957093]];
+G2L["d3"]["Size"] = UDim2.new(0.0801, 0, 0.9265, 0);
+G2L["d3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["d3"]["BackgroundTransparency"] = 1;
+G2L["d3"]["Name"] = [[fingerprint]];
+G2L["d3"]["Position"] = UDim2.new(0.99853, 0, 0.05474, 0);
+
+
 -- StarterGui.omarInkGame.Controls
 local function C_2()
 local script = G2L["2"];
@@ -2503,6 +2561,7 @@ local script = G2L["48"];
 	
 	-- Other game UIs
 	local second1 = gui:WaitForChild("second1")
+	local second2 = gui:WaitForChild("second2") -- New Dalgona button
 	local third1  = gui:WaitForChild("third1")
 	local third2  = gui:WaitForChild("third2")
 	local four1   = gui:WaitForChild("four1")
@@ -2513,7 +2572,7 @@ local script = G2L["48"];
 	local seven1  = gui:WaitForChild("seven1") -- Team info goes here
 	local rope1   = gui:WaitForChild("rope1")
 	local rope2   = gui:WaitForChild("rope2")
-	local sky1    = gui:WaitForChild("sky1") -- New SkySquidGame button
+	local sky1    = gui:WaitForChild("sky1") -- SkySquidGame button
 	
 	-- Red / Blue buttons
 	local red2    = gui:WaitForChild("red2")
@@ -2537,7 +2596,7 @@ local script = G2L["48"];
 		Mingle             = true,
 		HideAndSeek        = true,
 		JumpRope           = true,
-		SkySquidGame       = true, -- New mode
+		SkySquidGame       = true,
 	}
 	
 	-- Utility to hide everything
@@ -2546,7 +2605,7 @@ local script = G2L["48"];
 		first1Label.Visible  = false
 		first2.Visible, first3.Visible, first4.Visible = false, false, false
 		help1.Visible   = false
-		second1.Visible = false
+		second1.Visible, second2.Visible = false, false
 		third1.Visible, third2.Visible = false, false
 		four1.Visible   = false
 		five1.Visible, five2.Visible, five3.Visible = false, false, false
@@ -2596,6 +2655,7 @@ local script = G2L["48"];
 	
 		elseif v == "Dalgona" then
 			second1.Visible = true
+			second2.Visible = true -- New button
 	
 		elseif v == "LightsOut" then
 			third1.Visible, third2.Visible = true, true
@@ -2617,7 +2677,7 @@ local script = G2L["48"];
 			rope2.Visible = true
 	
 		elseif v == "SkySquidGame" then
-			sky1.Visible = true -- Show new button
+			sky1.Visible = true
 		end
 	end
 	
@@ -3999,5 +4059,112 @@ local script = G2L["c8"];
 	
 end;
 task.spawn(C_c8);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.soundclick
+local function C_ce()
+local script = G2L["ce"];
+	local btn = script.Parent
+	local soundService = game:GetService("SoundService")
+	
+	-- Click sound asset ID
+	local clickSound = Instance.new("Sound")
+	clickSound.SoundId = "rbxassetid://1673280232"  -- Your click sound asset ID
+	clickSound.Parent = btn  -- Set the sound as a child of the button
+	
+	-- Play click sound when button is clicked
+	btn.MouseButton1Click:Connect(function()
+		-- Play the sound
+		clickSound:Play()
+	end)
+	
+end;
+task.spawn(C_ce);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.second2.realone
+local function C_cf()
+local script = G2L["cf"];
+	-- LocalScript (place inside your TextButton)
+	local button = script.Parent
+	local effects = workspace:WaitForChild("Effects")
+	
+	-- Define the outlines and their target CFrames
+	local outlines = {
+		{
+			name = "CircleOutline",
+			cframe = CFrame.new(
+				451.476166, 95.5566559, -230.032883,
+				0.499959469, 1.00080776e-07, 0.866048813,
+				-1.24305089e-07, 1, -4.38003802e-08,
+				-0.866048813, -8.57558646e-08, 0.499959469
+			)
+		},
+		{
+			name = "UmbrellaOutline",
+			cframe = CFrame.new(
+				457.199188, 95.5520248, -218.093765,
+				-0.0127552748, -6.03468422e-08, -0.99991858,
+				-8.80097062e-08, 1, -5.92290625e-08,
+				0.99991858, 8.72470665e-08, -0.0127552748
+			)
+		},
+		{
+			name = "StarOutline",
+			cframe = CFrame.new(
+				474.890533, 95.5708008, -229.940109,
+				0.168880373, -7.40064863e-08, 0.985636532,
+				3.65016248e-08, 1, 6.88307225e-08,
+				-0.985636592, 2.43531773e-08, 0.168880373
+			)
+		},
+		{
+			name = "MonaLisaOutline",
+			cframe = CFrame.new(
+				389.483459, 95.5859375, -151.851593,
+				0.44300288, 1.77863767e-05, -0.896520257,
+				0.000164432364, 1, 0.000101091297,
+				0.896520257, -0.000192200663, 0.44300288
+			)
+		},
+		{
+			name = "TriangleOutline",
+			cframe = CFrame.new(
+				389.497223, 95.5804138, -151.741653,
+				-0.495113492, 0, -0.868828297,
+				0, 1, 0,
+				0.868828297, 0, -0.495113492
+			)
+		},
+		{
+			name = "SackBoyOutline",
+			cframe = CFrame.new(
+				389.571472, 95.5273361, -151.923386,
+				0.998789489, -0, -0.0491886549,
+				0, 1, -0,
+				0.0491886549, 0, 0.998789489
+			)
+		}
+	}
+	
+	-- Function to recolor and reposition parts
+	local function handleOutline(outline, targetCFrame)
+		for _, obj in ipairs(outline:GetDescendants()) do
+			if obj:IsA("BasePart") then
+				obj.Color = Color3.fromRGB(0, 0, 255) -- blue
+				obj.CFrame = targetCFrame
+			end
+		end
+	end
+	
+	-- Connect button click
+	button.MouseButton1Click:Connect(function()
+		for _, outlineInfo in ipairs(outlines) do
+			local outline = effects:FindFirstChild(outlineInfo.name)
+			if outline then
+				handleOutline(outline, outlineInfo.cframe)
+				break -- stop after first found outline
+			end
+		end
+	end)
+	
+end;
+task.spawn(C_cf);
 
 return G2L["1"], require;
