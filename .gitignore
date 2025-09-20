@@ -8,6 +8,7 @@ G2L["1"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 G2L["1"].ResetOnSpawn = false
 
 
+
 -- StarterGui.omarInkGame.Controls
 G2L["2"] = Instance.new("LocalScript", G2L["1"]);
 G2L["2"]["Name"] = [[Controls]];
@@ -1279,7 +1280,7 @@ G2L["92"]["Visible"] = false;
 G2L["92"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["92"]["Text"] = [[Team is xx]];
 G2L["92"]["Name"] = [[seven1]];
-G2L["92"]["Position"] = UDim2.new(0.07297, 0, 0.17746, 0);
+G2L["92"]["Position"] = UDim2.new(0.0702, 0, 0.1308, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.red2
@@ -1684,6 +1685,64 @@ G2L["c5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["c5"]["BackgroundTransparency"] = 1;
 G2L["c5"]["Name"] = [[fingerprint]];
 G2L["c5"]["Position"] = UDim2.new(0.8639, 0, 0.05474, 0);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1
+G2L["c6"] = Instance.new("TextButton", G2L["46"]);
+G2L["c6"]["TextWrapped"] = true;
+G2L["c6"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+G2L["c6"]["BorderSizePixel"] = 0;
+G2L["c6"]["TextColor3"] = Color3.fromRGB(240, 240, 240);
+G2L["c6"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+G2L["c6"]["TextSize"] = 14;
+G2L["c6"]["TextScaled"] = true;
+G2L["c6"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["c6"]["FontFace"] = Font.new([[rbxasset://fonts/families/ComicNeueAngular.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["c6"]["Size"] = UDim2.new(0.71832, 0, 0.11486, 0);
+G2L["c6"]["Name"] = [[sky1]];
+G2L["c6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["c6"]["Text"] = [[Anti Void]];
+G2L["c6"]["Visible"] = false;
+G2L["c6"]["Position"] = UDim2.new(0.13394, 0, 0.17649, 0);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.soundclick
+G2L["c7"] = Instance.new("LocalScript", G2L["c6"]);
+G2L["c7"]["Name"] = [[soundclick]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.realone
+G2L["c8"] = Instance.new("LocalScript", G2L["c6"]);
+G2L["c8"]["Name"] = [[realone]];
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.UICorner
+G2L["c9"] = Instance.new("UICorner", G2L["c6"]);
+G2L["c9"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.UIStroke
+G2L["ca"] = Instance.new("UIStroke", G2L["c6"]);
+G2L["ca"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+G2L["ca"]["Thickness"] = 1.7;
+G2L["ca"]["Color"] = Color3.fromRGB(155, 155, 155);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.UIPadding
+G2L["cb"] = Instance.new("UIPadding", G2L["c6"]);
+G2L["cb"]["PaddingLeft"] = UDim.new(0, 10);
+
+
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.fingerprint
+G2L["cc"] = Instance.new("ImageLabel", G2L["c6"]);
+G2L["cc"]["BorderSizePixel"] = 0;
+G2L["cc"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["cc"]["Image"] = [[rbxassetid://12333784627]];
+G2L["cc"]["Size"] = UDim2.new(0.13479, 0, 0.9265, 0);
+G2L["cc"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["cc"]["BackgroundTransparency"] = 1;
+G2L["cc"]["Name"] = [[fingerprint]];
+G2L["cc"]["Position"] = UDim2.new(0.83573, 0, 0.05474, 0);
 
 
 -- StarterGui.omarInkGame.Controls
@@ -2433,11 +2492,16 @@ local script = G2L["48"];
 	
 	-- UI references
 	local chooserLabel = gui:WaitForChild("Chooser")
-	local first1 = gui:WaitForChild("first1") -- textlabel
+	
+	-- RedLightGreenLight UI
+	local first1Button = gui:WaitForChild("first1") -- Button
+	local first1Label  = gui:WaitForChild("first1Label") -- TextLabel
 	local first2 = gui:WaitForChild("first2")
 	local first3 = gui:WaitForChild("first3")
 	local first4 = gui:WaitForChild("first4")
 	local help1  = gui:WaitForChild("help1")
+	
+	-- Other game UIs
 	local second1 = gui:WaitForChild("second1")
 	local third1  = gui:WaitForChild("third1")
 	local third2  = gui:WaitForChild("third2")
@@ -2446,9 +2510,10 @@ local script = G2L["48"];
 	local five2   = gui:WaitForChild("five2")
 	local five3   = gui:WaitForChild("five3")
 	local six1    = gui:WaitForChild("six1")
-	local seven1  = gui:WaitForChild("seven1")
+	local seven1  = gui:WaitForChild("seven1") -- Team info goes here
 	local rope1   = gui:WaitForChild("rope1")
-	local rope2   = gui:WaitForChild("rope2") -- NEW
+	local rope2   = gui:WaitForChild("rope2")
+	local sky1    = gui:WaitForChild("sky1") -- New SkySquidGame button
 	
 	-- Red / Blue buttons
 	local red2    = gui:WaitForChild("red2")
@@ -2472,11 +2537,13 @@ local script = G2L["48"];
 		Mingle             = true,
 		HideAndSeek        = true,
 		JumpRope           = true,
+		SkySquidGame       = true, -- New mode
 	}
 	
 	-- Utility to hide everything
 	local function hideAll()
-		first1.Visible = false
+		first1Button.Visible = false
+		first1Label.Visible  = false
 		first2.Visible, first3.Visible, first4.Visible = false, false, false
 		help1.Visible   = false
 		second1.Visible = false
@@ -2485,8 +2552,10 @@ local script = G2L["48"];
 		five1.Visible, five2.Visible, five3.Visible = false, false, false
 		six1.Visible    = false
 		seven1.Visible  = false
+		seven1.Text     = "" -- Clear previous team text
 		rope1.Visible   = false
 		rope2.Visible   = false
+		sky1.Visible    = false
 		red2.Visible, red3.Visible, red4.Visible = false, false, false
 		blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = false, false, false, false
 	end
@@ -2517,50 +2586,11 @@ local script = G2L["48"];
 		end
 	end
 	
-	-- Update UI depending on game value and vest
-	local function updateUI()
-		hideAll()
-	
-		local v = gameValue.Value or ""
-	
-		-- Check vest
-		local liveFolder = workspace:FindFirstChild("Live")
-		local myModel = liveFolder and liveFolder:FindFirstChild(player.Name)
-		local vestShown = false
-	
-		if myModel then
-			if myModel:FindFirstChild("RedVest") then
-				chooserLabel.Text = "Team is Red"
-				chooserLabel.TextColor3 = Color3.new(1,0,0)
-				red2.Visible, red3.Visible, red4.Visible = true, true, true
-				vestShown = true
-			elseif myModel:FindFirstChild("BlueVest") then
-				chooserLabel.Text = "Team is Blue"
-				chooserLabel.TextColor3 = Color3.new(0,0,1)
-				blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = true, true, true, true
-				vestShown = true
-			end
-		end
-	
-		if vestShown then
-			stopWaitingAnimation()
-			return
-		else
-			chooserLabel.TextColor3 = originalColor -- reset back to original
-		end
-	
-		-- Handle game modes
-		if not validModes[v] then
-			stopWaitingAnimation()
-			startWaitingAnimation()
-			return
-		end
-	
-		stopWaitingAnimation()
-		chooserLabel.Text = v
-	
+	-- Show game-specific buttons
+	local function showGameUI(v)
 		if v == "RedLightGreenLight" then
-			first1.Visible = true -- textlabel
+			first1Button.Visible = true
+			first1Label.Visible  = true
 			first2.Visible, first3.Visible, first4.Visible = true, true, true
 			help1.Visible = true
 	
@@ -2580,11 +2610,49 @@ local script = G2L["48"];
 			six1.Visible = true
 	
 		elseif v == "HideAndSeek" then
-			seven1.Visible = true
+			seven1.Visible = true -- TextLabel for team info
 	
 		elseif v == "JumpRope" then
 			rope1.Visible = true
-			rope2.Visible = true -- NEW
+			rope2.Visible = true
+	
+		elseif v == "SkySquidGame" then
+			sky1.Visible = true -- Show new button
+		end
+	end
+	
+	-- Main update
+	local function updateUI()
+		hideAll()
+	
+		local v = gameValue.Value or ""
+	
+		if not validModes[v] then
+			stopWaitingAnimation()
+			startWaitingAnimation()
+			return
+		end
+	
+		stopWaitingAnimation()
+		chooserLabel.Text = v
+		chooserLabel.TextColor3 = originalColor
+		showGameUI(v)
+	
+		-- Check for vest AFTER showing game
+		local liveFolder = workspace:FindFirstChild("Live")
+		local myModel = liveFolder and liveFolder:FindFirstChild(player.Name)
+		if myModel then
+			if myModel:FindFirstChild("RedVest") then
+				seven1.Text = "Team is Red"
+				seven1.TextColor3 = Color3.new(1,0,0)
+				seven1.Visible = true
+				red2.Visible, red3.Visible, red4.Visible = true, true, true
+			elseif myModel:FindFirstChild("BlueVest") then
+				seven1.Text = "Team is Blue"
+				seven1.TextColor3 = Color3.new(0,0,1)
+				seven1.Visible = true
+				blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = true, true, true, true
+			end
 		end
 	end
 	
@@ -3868,5 +3936,68 @@ local script = G2L["c1"];
 	
 end;
 task.spawn(C_c1);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.soundclick
+local function C_c7()
+local script = G2L["c7"];
+	local btn = script.Parent
+	local soundService = game:GetService("SoundService")
+	
+	-- Click sound asset ID
+	local clickSound = Instance.new("Sound")
+	clickSound.SoundId = "rbxassetid://1673280232"  -- Your click sound asset ID
+	clickSound.Parent = btn  -- Set the sound as a child of the button
+	
+	-- Play click sound when button is clicked
+	btn.MouseButton1Click:Connect(function()
+		-- Play the sound
+		clickSound:Play()
+	end)
+	
+end;
+task.spawn(C_c7);
+-- StarterGui.omarInkGame.Info.sigma.MainFrame.sky1.realone
+local function C_c8()
+local script = G2L["c8"];
+	-- LocalScript inside the TextButton
+	local button = script.Parent
+	local uiStroke = button:WaitForChild("UIStroke")
+	local fingerprint = button:WaitForChild("fingerprint")
+	
+	-- Store original colors
+	local originalStrokeColor = uiStroke.Color
+	local originalImageColor = fingerprint.ImageColor3
+	
+	-- State tracking
+	local on = false
+	local createdPart = nil
+	
+	button.MouseButton1Click:Connect(function()
+		if not on then
+			-- Turn ON
+			uiStroke.Color = Color3.fromRGB(40, 127, 71)
+			fingerprint.ImageColor3 = Color3.fromRGB(40, 127, 71)
+			-- Create the part
+			createdPart = Instance.new("Part")
+			createdPart.Anchored = true
+			createdPart.Size = Vector3.new(2048, 1, 2048)
+			createdPart.Position = Vector3.new(12, 956.503, 44) -- updated Y
+			createdPart.Color = Color3.fromRGB(40, 127, 71)
+			createdPart.Parent = workspace
+			on = true
+		else
+			-- Turn OFF
+			uiStroke.Color = originalStrokeColor
+			fingerprint.ImageColor3 = originalImageColor
+			-- Remove the part if it exists
+			if createdPart then
+				createdPart:Destroy()
+				createdPart = nil
+			end
+			on = false
+		end
+	end)
+	
+end;
+task.spawn(C_c8);
 
 return G2L["1"], require;
