@@ -8,7 +8,6 @@ G2L["1"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 G2L["1"].ResetOnSpawn = false
 
 
-
 -- StarterGui.omarInkGame.Controls
 G2L["2"] = Instance.new("LocalScript", G2L["1"]);
 G2L["2"]["Name"] = [[Controls]];
@@ -1299,7 +1298,7 @@ G2L["93"]["Name"] = [[red2]];
 G2L["93"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["93"]["Text"] = [[Esp Blue Team]];
 G2L["93"]["Visible"] = false;
-G2L["93"]["Position"] = UDim2.new(0.13948, 0, 0.29022, 0);
+G2L["93"]["Position"] = UDim2.new(0.13948, 0, 0.43894, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.red2.soundclick
@@ -1343,9 +1342,9 @@ G2L["99"]["FontFace"] = Font.new([[rbxasset://fonts/families/ComicNeueAngular.js
 G2L["99"]["Size"] = UDim2.new(0.71832, 0, 0.11486, 0);
 G2L["99"]["Name"] = [[red3]];
 G2L["99"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["99"]["Text"] = [[Bigger Hitbox Close PPL]];
+G2L["99"]["Text"] = [[Kill Blue]];
 G2L["99"]["Visible"] = false;
-G2L["99"]["Position"] = UDim2.new(0.13948, 0, 0.43973, 0);
+G2L["99"]["Position"] = UDim2.new(0.13948, 0, 0.29392, 0);
 
 
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.red3.soundclick
@@ -2905,100 +2904,154 @@ task.spawn(C_50);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.blue2.realone
 local function C_51()
 local script = G2L["51"];
-	-- LocalScript inside your TextButton
+	-- RedVest_BillboardHighlight_LocalScript (put inside your TextButton)
 	local button        = script.Parent
-	local uiStroke      = button:WaitForChild("UIStroke")
-	local originalColor = uiStroke.Color
+	local uiStroke      = button:FindFirstChild("UIStroke")
+	local originalColor = uiStroke and uiStroke.Color or nil
 	local espOn         = false
 	
-	local liveFolder    = workspace:WaitForChild("Live")
-	local espColor      = Color3.fromRGB(255, 0, 0) -- red ESP
+	local Players       = game:GetService("Players")
+	local player        = Players.LocalPlayer
+	local playerGui     = player:WaitForChild("PlayerGui")
+	local espFolder     = playerGui:FindFirstChild("BillboardESP") or Instance.new("Folder", playerGui)
+	espFolder.Name      = "BillboardESP"
 	
-	-- Function to add/remove ESP highlights
+	local liveFolder    = workspace:WaitForChild("Live")
+	local vestName      = "RedVest"
+	local espColor      = Color3.fromRGB(255, 0, 0)
+	
+	local billboards = {} -- model -> BillboardGui
+	local highlights = {} -- model -> Highlight
+	
+	local function createHighlight(model)
+		if not model or highlights[model] then return end
+		local hl = Instance.new("Highlight")
+		hl.Name = "ESP_HL"
+		hl.Adornee = model
+		hl.FillColor = espColor
+		hl.OutlineColor = espColor
+		hl.FillTransparency = 0.6
+		hl.Parent = model
+		highlights[model] = hl
+	end
+	
+	local function removeHighlight(model)
+		local hl = highlights[model]
+		if hl then
+			hl:Destroy()
+			highlights[model] = nil
+		end
+	end
+	
+	local function addBillboardFor(model, vestPart)
+		if not model or not vestPart or billboards[model] then return end
+	
+		-- Billboard
+		local bb = Instance.new("BillboardGui")
+		bb.Name = "ESP_BB"
+		bb.Adornee = vestPart
+		bb.AlwaysOnTop = true
+		bb.Size = UDim2.new(0, 140, 0, 28)
+		bb.StudsOffsetWorldSpace = Vector3.new(0, 2.5, 0)
+		bb.Parent = espFolder
+	
+		local frame = Instance.new("Frame")
+		frame.Size = UDim2.new(1, 0, 1, 0)
+		frame.BackgroundTransparency = 0.3
+		frame.BackgroundColor3 = espColor
+		frame.BorderSizePixel = 0
+		frame.Parent = bb
+	
+		local label = Instance.new("TextLabel")
+		label.Size = UDim2.new(1, 0, 1, 0)
+		label.BackgroundTransparency = 1
+		label.Text = model.Name
+		label.TextScaled = true
+		label.TextColor3 = Color3.fromRGB(255,255,255)
+		label.TextStrokeTransparency = 0.6
+		label.Parent = frame
+	
+		billboards[model] = bb
+	
+		-- Highlight
+		createHighlight(model)
+	end
+	
+	local function removeBillboardFor(model)
+		local bb = billboards[model]
+		if bb then
+			bb:Destroy()
+			billboards[model] = nil
+		end
+		removeHighlight(model)
+	end
+	
 	local function setESP(on)
-		for _, model in pairs(liveFolder:GetChildren()) do
-			if model:IsA("Model") then
-				local vest = model:FindFirstChild("RedVest")
-				local existing = model:FindFirstChild("ESPHighlight")
-				if on and vest then
-					if not existing then
-						local hl = Instance.new("Highlight")
-						hl.Name        = "ESPHighlight"
-						hl.Adornee     = model
-						hl.Parent      = model
-						hl.FillColor   = espColor
-						hl.OutlineColor= espColor
-					else
-						existing.FillColor = espColor
-						existing.OutlineColor = espColor
+		if on then
+			for _, model in pairs(liveFolder:GetChildren()) do
+				if model:IsA("Model") then
+					local vest = model:FindFirstChild(vestName, true)
+					if vest and not billboards[model] then
+						addBillboardFor(model, vest)
 					end
-				elseif existing then
-					existing:Destroy()
 				end
+			end
+		else
+			for model, _ in pairs(billboards) do
+				removeBillboardFor(model)
+			end
+			-- ensure highlights cleared if any left
+			for model, _ in pairs(highlights) do
+				removeHighlight(model)
 			end
 		end
 	end
 	
-	-- When a new model is added
+	-- dynamic watchers
+	liveFolder.DescendantAdded:Connect(function(desc)
+		if desc.Name == vestName and desc.Parent and desc.Parent:IsA("Model") then
+			if espOn then
+				addBillboardFor(desc.Parent, desc)
+			end
+		end
+	end)
+	
+	liveFolder.DescendantRemoving:Connect(function(desc)
+		if desc.Name == vestName and desc.Parent and desc.Parent:IsA("Model") then
+			removeBillboardFor(desc.Parent)
+		end
+	end)
+	
 	liveFolder.ChildAdded:Connect(function(child)
 		if child:IsA("Model") then
-			local vest = child:FindFirstChild("RedVest")
-			if espOn and vest then
-				if not child:FindFirstChild("ESPHighlight") then
-					local hl = Instance.new("Highlight")
-					hl.Name        = "ESPHighlight"
-					hl.Adornee     = child
-					hl.Parent      = child
-					hl.FillColor   = espColor
-					hl.OutlineColor= espColor
-				end
-			end
-	
-			-- Track vest removal in this model
-			child.DescendantRemoving:Connect(function(desc)
-				if desc.Name == "RedVest" and desc.Parent == child then
-					local existing = child:FindFirstChild("ESPHighlight")
-					if existing then existing:Destroy() end
-				end
-			end)
-		end
-	end)
-	
-	-- Also handle when vest is added to existing models
-	liveFolder.DescendantAdded:Connect(function(desc)
-		if desc.Name == "RedVest" and desc.Parent:IsA("Model") then
-			if espOn then
-				local model = desc.Parent
-				if not model:FindFirstChild("ESPHighlight") then
-					local hl = Instance.new("Highlight")
-					hl.Name        = "ESPHighlight"
-					hl.Adornee     = model
-					hl.Parent      = model
-					hl.FillColor   = espColor
-					hl.OutlineColor= espColor
-				end
+			local vest = child:FindFirstChild(vestName, true)
+			if vest and espOn then
+				addBillboardFor(child, vest)
 			end
 		end
 	end)
 	
-	-- Toggle button click
+	liveFolder.ChildRemoved:Connect(function(child)
+		-- clean maps if model is removed entirely
+		if billboards[child] or highlights[child] then
+			removeBillboardFor(child)
+		end
+	end)
+	
+	-- toggle button
 	button.MouseButton1Click:Connect(function()
 		espOn = not espOn
 		if espOn then
-			uiStroke.Color = Color3.fromRGB(0, 255, 0) -- green button when on
+			if uiStroke then uiStroke.Color = Color3.fromRGB(0,255,0) end
 			setESP(true)
 		else
-			uiStroke.Color = originalColor
+			if uiStroke and originalColor then uiStroke.Color = originalColor end
 			setESP(false)
 		end
 	end)
 	
-	-- Keep ESP persistent even if button is hidden
 	button:GetPropertyChangedSignal("Visible"):Connect(function()
-		if not button.Visible and espOn then
-			uiStroke.Color = Color3.fromRGB(0, 255, 0)
-			setESP(true)
-		end
+		if espOn then setESP(true) end
 	end)
 	
 end;
@@ -3418,100 +3471,147 @@ task.spawn(C_94);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.red2.realone
 local function C_95()
 local script = G2L["95"];
-	-- LocalScript inside your TextButton
+	-- BlueVest_BillboardHighlight_LocalScript (put inside your TextButton)
 	local button        = script.Parent
-	local uiStroke      = button:WaitForChild("UIStroke")
-	local originalColor = uiStroke.Color
+	local uiStroke      = button:FindFirstChild("UIStroke")
+	local originalColor = uiStroke and uiStroke.Color or nil
 	local espOn         = false
 	
-	local liveFolder    = workspace:WaitForChild("Live")
-	local espColor      = Color3.fromRGB(0, 0, 255) -- blue ESP
+	local Players       = game:GetService("Players")
+	local player        = Players.LocalPlayer
+	local playerGui     = player:WaitForChild("PlayerGui")
+	local espFolder     = playerGui:FindFirstChild("BillboardESP") or Instance.new("Folder", playerGui)
+	espFolder.Name      = "BillboardESP"
 	
-	-- Function to add/remove ESP highlights
+	local liveFolder    = workspace:WaitForChild("Live")
+	local vestName      = "BlueVest"
+	local espColor      = Color3.fromRGB(0, 0, 255)
+	
+	local billboards = {} -- model -> BillboardGui
+	local highlights = {} -- model -> Highlight
+	
+	local function createHighlight(model)
+		if not model or highlights[model] then return end
+		local hl = Instance.new("Highlight")
+		hl.Name = "ESP_HL"
+		hl.Adornee = model
+		hl.FillColor = espColor
+		hl.OutlineColor = espColor
+		hl.FillTransparency = 0.6
+		hl.Parent = model
+		highlights[model] = hl
+	end
+	
+	local function removeHighlight(model)
+		local hl = highlights[model]
+		if hl then
+			hl:Destroy()
+			highlights[model] = nil
+		end
+	end
+	
+	local function addBillboardFor(model, vestPart)
+		if not model or not vestPart or billboards[model] then return end
+	
+		local bb = Instance.new("BillboardGui")
+		bb.Name = "ESP_BB"
+		bb.Adornee = vestPart
+		bb.AlwaysOnTop = true
+		bb.Size = UDim2.new(0, 140, 0, 28)
+		bb.StudsOffsetWorldSpace = Vector3.new(0, 2.5, 0)
+		bb.Parent = espFolder
+	
+		local frame = Instance.new("Frame")
+		frame.Size = UDim2.new(1, 0, 1, 0)
+		frame.BackgroundTransparency = 0.3
+		frame.BackgroundColor3 = espColor
+		frame.BorderSizePixel = 0
+		frame.Parent = bb
+	
+		local label = Instance.new("TextLabel")
+		label.Size = UDim2.new(1, 0, 1, 0)
+		label.BackgroundTransparency = 1
+		label.Text = model.Name
+		label.TextScaled = true
+		label.TextColor3 = Color3.fromRGB(255,255,255)
+		label.TextStrokeTransparency = 0.6
+		label.Parent = frame
+	
+		billboards[model] = bb
+		createHighlight(model)
+	end
+	
+	local function removeBillboardFor(model)
+		local bb = billboards[model]
+		if bb then
+			bb:Destroy()
+			billboards[model] = nil
+		end
+		removeHighlight(model)
+	end
+	
 	local function setESP(on)
-		for _, model in pairs(liveFolder:GetChildren()) do
-			if model:IsA("Model") then
-				local vest = model:FindFirstChild("BlueVest")
-				local existing = model:FindFirstChild("ESPHighlight")
-				if on and vest then
-					if not existing then
-						local hl = Instance.new("Highlight")
-						hl.Name        = "ESPHighlight"
-						hl.Adornee     = model
-						hl.Parent      = model
-						hl.FillColor   = espColor
-						hl.OutlineColor= espColor
-					else
-						existing.FillColor = espColor
-						existing.OutlineColor = espColor
+		if on then
+			for _, model in pairs(liveFolder:GetChildren()) do
+				if model:IsA("Model") then
+					local vest = model:FindFirstChild(vestName, true)
+					if vest and not billboards[model] then
+						addBillboardFor(model, vest)
 					end
-				elseif existing then
-					existing:Destroy()
 				end
+			end
+		else
+			for model, _ in pairs(billboards) do
+				removeBillboardFor(model)
+			end
+			for model, _ in pairs(highlights) do
+				removeHighlight(model)
 			end
 		end
 	end
 	
-	-- When a new model is added
+	liveFolder.DescendantAdded:Connect(function(desc)
+		if desc.Name == vestName and desc.Parent and desc.Parent:IsA("Model") then
+			if espOn then
+				addBillboardFor(desc.Parent, desc)
+			end
+		end
+	end)
+	
+	liveFolder.DescendantRemoving:Connect(function(desc)
+		if desc.Name == vestName and desc.Parent and desc.Parent:IsA("Model") then
+			removeBillboardFor(desc.Parent)
+		end
+	end)
+	
 	liveFolder.ChildAdded:Connect(function(child)
 		if child:IsA("Model") then
-			local vest = child:FindFirstChild("BlueVest")
-			if espOn and vest then
-				if not child:FindFirstChild("ESPHighlight") then
-					local hl = Instance.new("Highlight")
-					hl.Name        = "ESPHighlight"
-					hl.Adornee     = child
-					hl.Parent      = child
-					hl.FillColor   = espColor
-					hl.OutlineColor= espColor
-				end
-			end
-	
-			-- Track vest removal in this model
-			child.DescendantRemoving:Connect(function(desc)
-				if desc.Name == "BlueVest" and desc.Parent == child then
-					local existing = child:FindFirstChild("ESPHighlight")
-					if existing then existing:Destroy() end
-				end
-			end)
-		end
-	end)
-	
-	-- Also handle when vest is added to existing models
-	liveFolder.DescendantAdded:Connect(function(desc)
-		if desc.Name == "BlueVest" and desc.Parent:IsA("Model") then
-			if espOn then
-				local model = desc.Parent
-				if not model:FindFirstChild("ESPHighlight") then
-					local hl = Instance.new("Highlight")
-					hl.Name        = "ESPHighlight"
-					hl.Adornee     = model
-					hl.Parent      = model
-					hl.FillColor   = espColor
-					hl.OutlineColor= espColor
-				end
+			local vest = child:FindFirstChild(vestName, true)
+			if vest and espOn then
+				addBillboardFor(child, vest)
 			end
 		end
 	end)
 	
-	-- Toggle button click
+	liveFolder.ChildRemoved:Connect(function(child)
+		if billboards[child] or highlights[child] then
+			removeBillboardFor(child)
+		end
+	end)
+	
 	button.MouseButton1Click:Connect(function()
 		espOn = not espOn
 		if espOn then
-			uiStroke.Color = Color3.fromRGB(0, 255, 0) -- green button when on
+			if uiStroke then uiStroke.Color = Color3.fromRGB(0,255,0) end
 			setESP(true)
 		else
-			uiStroke.Color = originalColor
+			if uiStroke and originalColor then uiStroke.Color = originalColor end
 			setESP(false)
 		end
 	end)
 	
-	-- Keep ESP persistent even if button is hidden
 	button:GetPropertyChangedSignal("Visible"):Connect(function()
-		if not button.Visible and espOn then
-			uiStroke.Color = Color3.fromRGB(0, 255, 0)
-			setESP(true)
-		end
+		if espOn then setESP(true) end
 	end)
 	
 end;
@@ -3538,87 +3638,132 @@ task.spawn(C_9a);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.red3.realone
 local function C_9b()
 local script = G2L["9b"];
-	local button = script.Parent
-	local player = game.Players.LocalPlayer
-	local UIS = game:GetService("UserInputService")
+	-- Studio / testing-only LocalScript for toggling "follow target" behavior.
+	-- DO NOT USE IN LIVE/ONLINE GAMES. For testing in Roblox Studio only.
+	
 	local RunService = game:GetService("RunService")
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
 	
-	-- UI elements
-	local uiStroke = button:FindFirstChildOfClass("UIStroke")
-	local imageLabel = button:FindFirstChild("fingerprint")
+	local button = script.Parent
+	assert(button:IsA("TextButton"), "This LocalScript should be a child of a TextButton")
 	
-	-- Store original colors
-	local originalStrokeColor = uiStroke and uiStroke.Color or Color3.new(1, 1, 1)
-	local originalImageColor = imageLabel and imageLabel.ImageColor3 or Color3.new(1, 1, 1)
-	
-	-- Config
-	local HITBOX_SIZE = Vector3.new(15, 15, 15)
-	local HITBOX_TRANSPARENCY = 0.9
-	local DEFAULT_SIZE = Vector3.new(2, 2, 1)
-	local PROXIMITY_RADIUS = 10 -- only affect players within 50 studs
-	
-	-- Toggle state
-	local hitboxEnabled = false
-	local teamCheck = false -- optional team filter
-	
-	-- Function to apply or reset hitboxes
-	local function updateHitboxes()
-		local myChar = player.Character
-		local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
-		if not myRoot then return end
-	
-		for _, target in ipairs(game.Players:GetPlayers()) do
-			if target ~= player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-				local root = target.Character.HumanoidRootPart
-				local sameTeam = (player.Team == target.Team)
-				local distance = (myRoot.Position - root.Position).Magnitude
-	
-				if hitboxEnabled and distance <= PROXIMITY_RADIUS and (not teamCheck or not sameTeam) then
-					pcall(function()
-						root.Size = HITBOX_SIZE
-						root.Transparency = HITBOX_TRANSPARENCY
-						root.BrickColor = BrickColor.new("Really black")
-						root.Material = Enum.Material.Neon
-						root.CanCollide = false
-					end)
-				else
-					pcall(function()
-						root.Size = DEFAULT_SIZE
-						root.Transparency = 1
-						root.BrickColor = BrickColor.new("Medium stone grey")
-						root.Material = Enum.Material.Plastic
-						root.CanCollide = false
-					end)
-				end
-			end
-		end
+	-- UIStroke to change color when ON
+	local uiStroke = button:FindFirstChild("UIStroke")
+	if not uiStroke then
+		uiStroke = Instance.new("UIStroke")
+		uiStroke.Parent = button
 	end
 	
-	-- Run hitbox updates on a loop while active
-	RunService.RenderStepped:Connect(function()
-		if hitboxEnabled then
-			updateHitboxes()
-		end
-	end)
+	local prevColor = uiStroke.Color or Color3.fromRGB(255,255,255)
+	local onColor = Color3.fromRGB(0,255,0) -- green when ON
 	
-	-- On character respawn, restore hitbox state
-	player.CharacterAdded:Connect(function()
-		if hitboxEnabled then
-			task.wait(1)
-			updateHitboxes()
-		end
-	end)
+	-- Target config (for testing)
+	local liveFolder = workspace:WaitForChild("Live")
+	local targetModelName = "BlueVest" -- the model MUST exist inside a model in workspace.Live for testing
 	
-	-- Button click toggles hitbox and UI
+	local following = false
+	local followConn
+	
+	local function findTarget()
+		for _, model in pairs(liveFolder:GetChildren()) do
+			if model:FindFirstChild(targetModelName) then
+				return model
+			end
+		end
+		return nil
+	end
+	
+	local function stopFollowing()
+		if not following then return end
+		following = false
+		if followConn then
+			followConn:Disconnect()
+			followConn = nil
+		end
+		-- revert UIStroke color
+		uiStroke.Color = prevColor
+		-- optional: give feedback
+		-- print("Stopped following (testing mode)")
+	end
+	
+	local function startFollowing()
+		if following then return end
+	
+		local target = findTarget()
+		if not target then
+			warn("Testing target not found in workspace.Live. Place a test model that contains a child named '"..targetModelName.."'")
+			return
+		end
+	
+		local targetRoot = target:FindFirstChild("HumanoidRootPart") or target:FindFirstWhichIsA("BasePart")
+		local humanoid = target:FindFirstChildWhichIsA("Humanoid")
+		if humanoid and humanoid.Health <= 0 then
+			warn("Target already dead (testing).")
+			return
+		end
+	
+		-- make sure player character exists
+		local char = player.Character or player.CharacterAdded:Wait()
+		local myRoot = char:WaitForChild("HumanoidRootPart")
+	
+		following = true
+		uiStroke.Color = onColor
+	
+		-- follow loop: sticks your HumanoidRootPart exactly to target's root CFrame
+		followConn = RunService.RenderStepped:Connect(function()
+			if not following then return end
+	
+			-- if target removed or parented away, stop
+			if not target or not target.Parent then
+				stopFollowing()
+				return
+			end
+	
+			-- check humanoid health (stop if 0)
+			if humanoid then
+				if humanoid.Health <= 0 then
+					stopFollowing()
+					return
+				end
+			end
+	
+			-- update references (in case character respawned)
+			if not myRoot.Parent then
+				char = player.Character
+				if char then
+					myRoot = char:FindFirstChild("HumanoidRootPart")
+				end
+			end
+			targetRoot = target:FindFirstChild("HumanoidRootPart") or target:FindFirstWhichIsA("BasePart")
+	
+			if myRoot and targetRoot then
+				-- directly set CFrame to target's CFrame (on body, no vertical offset)
+				myRoot.CFrame = targetRoot.CFrame
+			end
+		end)
+	end
+	
+	-- Button click toggles follow ON/OFF
 	button.MouseButton1Click:Connect(function()
-		hitboxEnabled = not hitboxEnabled
-	
-		if uiStroke then
-			uiStroke.Color = hitboxEnabled and Color3.fromRGB(0, 255, 0) or originalStrokeColor
+		if following then
+			stopFollowing()
+		else
+			startFollowing()
 		end
+	end)
 	
-		if imageLabel then
-			imageLabel.ImageColor3 = hitboxEnabled and Color3.fromRGB(0, 255, 0) or originalImageColor
+	-- If the button becomes invisible while following, stop following and revert color
+	button:GetPropertyChangedSignal("Visible"):Connect(function()
+		if not button.Visible and following then
+			stopFollowing()
+		end
+	end)
+	
+	-- Cleanup if the script is disabled/removed
+	script.AncestryChanged:Connect(function()
+		if not script:IsDescendantOf(game) then
+			stopFollowing()
 		end
 	end)
 	
