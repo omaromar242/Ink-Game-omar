@@ -2599,7 +2599,7 @@ local script = G2L["48"];
 		SkySquidGame       = true,
 	}
 	
-	-- Utility to hide everything
+	-- Utility to hide everything (keeps chooser alone controlled)
 	local function hideAll()
 		first1Button.Visible = false
 		first1Label.Visible  = false
@@ -2626,11 +2626,13 @@ local script = G2L["48"];
 	local function startWaitingAnimation()
 		if isWaiting then return end
 		isWaiting = true
+		if animConn then animConn:Disconnect() animConn = nil end
 		animConn = RunService.Heartbeat:Connect(function()
 			if not isWaiting then
-				animConn:Disconnect()
+				if animConn then animConn:Disconnect() animConn = nil end
 				return
 			end
+			if not chooserLabel then return end
 			local dots = (math.floor(tick() * 2) % 3) + 1
 			chooserLabel.Text = "Waiting for gamemode" .. string.rep(".", dots)
 		end)
@@ -2670,7 +2672,8 @@ local script = G2L["48"];
 			six1.Visible = true
 	
 		elseif v == "HideAndSeek" then
-			seven1.Visible = true -- Always show team info if available
+			-- Always show the mode UI (team info/buttons are conditional)
+			seven1.Visible = true
 	
 		elseif v == "JumpRope" then
 			rope1.Visible = true
@@ -2681,34 +2684,73 @@ local script = G2L["48"];
 		end
 	end
 	
-	-- Main update
-	local function updateUI()
+	-- Model listener management so vest add/remove updates UI immediately
+	local modelConns = {}
+	local function detachModelListeners()
+		for _, c in ipairs(modelConns) do
+			pcall(function() c:Disconnect() end)
+		end
+		modelConns = {}
+	end
+	
+	local function attachModelListeners(model)
+		-- detach old first
+		detachModelListeners()
+		if not model then return end
+		-- when children added or removed under the player's model (e.g. vest added/removed)
+		table.insert(modelConns, model.ChildAdded:Connect(function() updateUI() end))
+		table.insert(modelConns, model.ChildRemoved:Connect(function() updateUI() end))
+		-- also listen for descendant changes to catch nested vest parenting if necessary
+		table.insert(modelConns, model.DescendantAdded:Connect(function() updateUI() end))
+		table.insert(modelConns, model.DescendantRemoving and model.DescendantRemoving:Connect(function() updateUI() end) or model.DescendantRemoving and model.DescendantRemoving:Connect(updateUI) or nil)
+	end
+	
+	-- Main update function (keeps existing behavior, but will attach model listeners when in HideAndSeek)
+	function updateUI()
+		-- reset UI
 		hideAll()
 	
 		local v = gameValue.Value or ""
 	
+		-- if invalid mode -> waiting
 		if not validModes[v] then
 			stopWaitingAnimation()
 			startWaitingAnimation()
+			-- detach model listeners when not in HideAndSeek to avoid stray calls
+			detachModelListeners()
 			return
 		end
 	
+		-- show mode UI first
 		stopWaitingAnimation()
 		chooserLabel.Text = v
 		chooserLabel.TextColor3 = originalColor
 		showGameUI(v)
 	
-		-- Check for vest and team info
+		-- Ensure we have live folder
 		local liveFolder = workspace:FindFirstChild("Live")
 		local myModel = liveFolder and liveFolder:FindFirstChild(player.Name)
+	
+		-- If in HideAndSeek mode, attach listeners to player's model (so future vest adds/removes update UI)
+		if v == "HideAndSeek" then
+			attachModelListeners(myModel)
+		else
+			-- if leaving HideAndSeek, detach model listeners
+			detachModelListeners()
+		end
+	
+		-- Check for vests now and show team info/buttons if present
 		if myModel then
 			if myModel:FindFirstChild("RedVest") then
 				seven1.Text = "Team is Red"
 				seven1.TextColor3 = Color3.new(1,0,0)
 				seven1.Visible = true
+				-- show red team buttons regardless of whether mode is HideAndSeek or not,
+				-- but previously you wanted them shown only when in HideAndSeek, so keep that:
 				if v == "HideAndSeek" then
 					red2.Visible, red3.Visible, red4.Visible = true, true, true
 				end
+				return
 			elseif myModel:FindFirstChild("BlueVest") then
 				seven1.Text = "Team is Blue"
 				seven1.TextColor3 = Color3.new(0,0,1)
@@ -2716,16 +2758,73 @@ local script = G2L["48"];
 				if v == "HideAndSeek" then
 					blue1.Visible, blue2.Visible, blue3.Visible, blue4.Visible = true, true, true, true
 				end
+				return
 			end
 		end
+	
+		-- If no vest present, keep mode UI visible (chooser shows gamemode or waiting dots)
+		-- nothing else to do
 	end
 	
-	-- Listeners
-	gameValue:GetPropertyChangedSignal("Value"):Connect(updateUI)
+	-- Listen for CurrentGame changes
+	gameValue:GetPropertyChangedSignal("Value"):Connect(function() 
+		-- When the mode changes, call update
+		updateUI()
+	end)
 	
-	local liveFolder = workspace:WaitForChild("Live")
-	liveFolder.ChildAdded:Connect(updateUI)
-	liveFolder.ChildRemoved:Connect(updateUI)
+	-- Listen for Live folder changes: model added/removed -> update (and attach/detach as needed)
+	local liveFolder = workspace:FindFirstChild("Live")
+	if liveFolder then
+		liveFolder.ChildAdded:Connect(function(child)
+			if child.Name == player.Name then
+				-- player's model added -> attach listeners and update UI
+				attachModelListeners(child)
+				updateUI()
+			else
+				-- other player models added -> still update (in case logic depends on any)
+				updateUI()
+			end
+		end)
+		liveFolder.ChildRemoved:Connect(function(child)
+			if child.Name == player.Name then
+				-- player's model removed -> detach and update
+				detachModelListeners()
+				updateUI()
+			else
+				updateUI()
+			end
+		end)
+	else
+		-- if Live doesn't exist yet, wait for it once
+		spawn(function()
+			liveFolder = workspace:WaitForChild("Live")
+			liveFolder.ChildAdded:Connect(function(child)
+				if child.Name == player.Name then
+					attachModelListeners(child)
+					updateUI()
+				else
+					updateUI()
+				end
+			end)
+			liveFolder.ChildRemoved:Connect(function(child)
+				if child.Name == player.Name then
+					detachModelListeners()
+					updateUI()
+				else
+					updateUI()
+				end
+			end)
+		end)
+	end
+	
+	-- Attach model listeners if model already exists at start
+	local startLive = workspace:FindFirstChild("Live")
+	if startLive then
+		local startModel = startLive:FindFirstChild(player.Name)
+		if startModel then
+			attachModelListeners(startModel)
+		end
+	end
 	
 	-- Initial call
 	updateUI()
