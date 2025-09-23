@@ -7,7 +7,6 @@ G2L["1"].Name = "omarInkGame"
 G2L["1"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 G2L["1"].ResetOnSpawn = false
 
-
 -- StarterGui.omarInkGame.Controls
 G2L["2"] = Instance.new("LocalScript", G2L["1"]);
 G2L["2"]["Name"] = [[Controls]];
@@ -4044,7 +4043,7 @@ task.spawn(C_ac);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.blue4.realone
 local function C_ad()
 local script = G2L["ad"];
-	-- LocalScript (place inside your TextButton)
+	-- LocalScript (put inside your TextButton)
 	local button = script.Parent
 	local uiStroke = button:WaitForChild("UIStroke")
 	local Players = game:GetService("Players")
@@ -4057,10 +4056,11 @@ local script = G2L["ad"];
 	
 	local active = false
 	local highlights = {}        -- [model] = highlightInstance
-	local modelConnections = {}  -- [model] = connection (AncestryChanged)
-	local folderConnections = {} -- connections to folder.ChildAdded (so we can disconnect on OFF)
+	local billboards = {}        -- [model] = billboardGuiInstance
+	local modelConnections = {}  -- [model] = ancestry/descendant connection(s)
+	local folderConnections = {} -- [folder] = { ChildAddedConn, DescendantAddedConn }
 	
-	-- safely get folders (will yield until they exist)
+	-- helper: safely get the three exit folders
 	local function getExitFolders()
 		local map = workspace:WaitForChild("HideAndSeekMap")
 		local fixed = map:WaitForChild("NEWFIXEDDOORS")
@@ -4070,60 +4070,106 @@ local script = G2L["ad"];
 		return {f1, f2, f3}
 	end
 	
-	-- create highlight for a model if not already present
-	local function createHighlightForModel(model)
-		if not model or not model:IsA("Model") then return end
-		if highlights[model] then return end
-	
-		-- check for ExitSign somewhere inside this model (recursive)
-		local sign = model:FindFirstChild("ExitSign", true)
-		if not sign then return end
-	
-		local hl = Instance.new("Highlight")
-		hl.Adornee = model
-		hl.FillColor = onColor
-		hl.OutlineColor = onColor
-		-- optionally adjust transparency / other properties:
-		hl.FillTransparency = 0.65
-		hl.OutlineTransparency = 0
-		hl.Parent = model  -- client-side highlight parented to model
-	
-		highlights[model] = hl
-	
-		-- remove highlight if the model is removed from the world
-		local conn
-		conn = model.AncestryChanged:Connect(function(_, parent)
-			if not model:IsDescendantOf(workspace) then
-				if highlights[model] then
-					highlights[model]:Destroy()
-					highlights[model] = nil
-				end
-				if conn then conn:Disconnect() end
-				modelConnections[model] = nil
-			end
-		end)
-		modelConnections[model] = conn
-	end
-	
-	-- remove highlight for a model
-	local function removeHighlightForModel(model)
+	-- remove all visuals & connections for a given model
+	local function cleanupModelVisuals(model)
 		if highlights[model] then
 			pcall(function() highlights[model]:Destroy() end)
 			highlights[model] = nil
 		end
+		if billboards[model] then
+			pcall(function() billboards[model]:Destroy() end)
+			billboards[model] = nil
+		end
 		if modelConnections[model] then
-			pcall(function() modelConnections[model]:Disconnect() end)
+			for _, conn in pairs(modelConnections[model]) do
+				pcall(function() conn:Disconnect() end)
+			end
 			modelConnections[model] = nil
 		end
 	end
 	
-	-- search all models currently in the folders and create highlights
+	-- create the Highlight (model-wide)
+	local function createHighlightForModel(model)
+		if not model or not model:IsA("Model") then return end
+		if highlights[model] then return end
+	
+		-- check for ExitSign somewhere inside this model
+		local sign = model:FindFirstChild("ExitSign", true)
+		if not sign then
+			-- if no sign exists right now, we still may want to watch for it later
+			-- set up a DescendantAdded on the model to detect when ExitSign appears
+			if not modelConnections[model] then modelConnections[model] = {} end
+			local addedConn = model.DescendantAdded:Connect(function(desc)
+				if desc.Name == "ExitSign" then
+					-- a sign appeared — attempt to create visuals
+					createHighlightForModel(model)
+				end
+			end)
+			table.insert(modelConnections[model], addedConn)
+			-- also watch for model removal in ancestry changed (cleanup)
+			local ancConn = model.AncestryChanged:Connect(function(_, parent)
+				if not model:IsDescendantOf(workspace) then
+					cleanupModelVisuals(model)
+				end
+			end)
+			table.insert(modelConnections[model], ancConn)
+			return
+		end
+	
+		-- create Highlight
+		local hl = Instance.new("Highlight")
+		hl.Adornee = model
+		hl.FillColor = onColor
+		hl.OutlineColor = onColor
+		hl.FillTransparency = 0.65
+		hl.OutlineTransparency = 0
+		hl.Parent = model
+		highlights[model] = hl
+	
+		-- create billboard label attached to the sign (or primarypart fallback)
+		local attachPart = sign
+		if not attachPart and model.PrimaryPart then
+			attachPart = model.PrimaryPart
+		end
+		if attachPart then
+			local playerGui = player:FindFirstChildOfClass("PlayerGui") or player:WaitForChild("PlayerGui")
+			local bb = Instance.new("BillboardGui")
+			bb.Name = "ExitBillboard"
+			bb.Adornee = attachPart
+			bb.AlwaysOnTop = true
+			bb.Size = UDim2.new(0, 120, 0, 28)
+			bb.StudsOffset = Vector3.new(0, 2.5, 0)
+			bb.Parent = playerGui
+	
+			local label = Instance.new("TextLabel")
+			label.Size = UDim2.new(1, 0, 1, 0)
+			label.BackgroundTransparency = 0.15
+			label.BackgroundColor3 = onColor
+			label.Text = "EXIT"
+			label.TextColor3 = Color3.new(1,1,1)
+			label.Font = Enum.Font.GothamBold
+			label.TextScaled = true
+			label.BorderSizePixel = 0
+			label.Parent = bb
+	
+			billboards[model] = bb
+		end
+	
+		-- watch for model removal to cleanup
+		if not modelConnections[model] then modelConnections[model] = {} end
+		local ancConn2 = model.AncestryChanged:Connect(function(_, parent)
+			if not model:IsDescendantOf(workspace) then
+				cleanupModelVisuals(model)
+			end
+		end)
+		table.insert(modelConnections[model], ancConn2)
+	end
+	
+	-- scan and highlight all existing models in folders
 	local function scanAndHighlightAll()
 		local folders = getExitFolders()
 		for _, folder in ipairs(folders) do
 			for _, v in ipairs(folder:GetChildren()) do
-				-- v may be a Model or container of EXITDOOR models
-				-- if the folder contains many models called EXITDOOR, we'll iterate them
 				if v:IsA("Model") then
 					createHighlightForModel(v)
 				end
@@ -4131,27 +4177,41 @@ local script = G2L["ad"];
 		end
 	end
 	
-	-- start listening to folder additions so new doors will get ESP while active
+	-- start listening to folders so new doors or ExitSigns get ESP while active
 	local function startFolderListeners()
 		local folders = getExitFolders()
 		for _, folder in ipairs(folders) do
-			-- avoid creating multiple connections
 			if not folderConnections[folder] then
-				local conn = folder.ChildAdded:Connect(function(child)
-					-- small delay to let the child's descendants initialize
+				local conns = {}
+	
+				-- handle when a whole new model is added as a child
+				local childAddedConn = folder.ChildAdded:Connect(function(child)
 					task.wait(0.05)
 					if child:IsA("Model") then
 						createHighlightForModel(child)
 					end
 				end)
-				folderConnections[folder] = conn
+				table.insert(conns, childAddedConn)
+	
+				-- handle when a new descendant named "ExitSign" appears anywhere under the folder
+				local descAddedConn = folder.DescendantAdded:Connect(function(desc)
+					if desc.Name == "ExitSign" then
+						local model = desc:FindFirstAncestorOfClass("Model")
+						if model then
+							createHighlightForModel(model)
+						end
+					end
+				end)
+				table.insert(conns, descAddedConn)
+	
+				folderConnections[folder] = conns
 			end
 		end
 	end
 	
 	local function stopFolderListeners()
-		for folder, conn in pairs(folderConnections) do
-			if conn then
+		for folder, conns in pairs(folderConnections) do
+			for _, conn in ipairs(conns) do
 				pcall(function() conn:Disconnect() end)
 			end
 			folderConnections[folder] = nil
@@ -4166,24 +4226,26 @@ local script = G2L["ad"];
 		startFolderListeners()
 	end
 	
-	-- disable ESP and cleanup
+	-- disable ESP and cleanup everything
 	local function disableESP()
 		uiStroke.Color = originalColor
 		active = false
 	
-		-- destroy all highlights
-		for model, hl in pairs(highlights) do
-			pcall(function() hl:Destroy() end)
-			highlights[model] = nil
+		-- destroy all highlights and billboards
+		for model, _ in pairs(highlights) do
+			cleanupModelVisuals(model)
 		end
 	
-		-- disconnect model connections
-		for model, conn in pairs(modelConnections) do
-			pcall(function() conn:Disconnect() end)
-			modelConnections[model] = nil
+		-- just in case any lingering billboards in playergui (defensive)
+		local playerGui = player:FindFirstChildOfClass("PlayerGui")
+		if playerGui then
+			for _, child in ipairs(playerGui:GetChildren()) do
+				if child:IsA("BillboardGui") and child.Name == "ExitBillboard" then
+					pcall(function() child:Destroy() end)
+				end
+			end
 		end
 	
-		-- stop folder listeners
 		stopFolderListeners()
 	end
 	
@@ -4196,11 +4258,29 @@ local script = G2L["ad"];
 		end
 	end)
 	
-	-- if anything unexpected happens (folders removed) make sure to cleanup
+	-- safety: if a model/part with visuals is removed, cleanup
 	workspace.DescendantRemoving:Connect(function(desc)
-		-- if a model with a highlight is being removed, destroy its highlight (safety)
-		if highlights[desc] then
-			removeHighlightForModel(desc)
+		-- if a model with visuals is being removed, cleanup (desc could be the model or its child)
+		if desc:IsA("Model") and (highlights[desc] or billboards[desc]) then
+			cleanupModelVisuals(desc)
+			return
+		end
+		-- if a part that is an ExitSign is removed, find its model and cleanup visuals for that model
+		if desc.Name == "ExitSign" then
+			local model = desc:FindFirstAncestorOfClass("Model")
+			if model then
+				cleanupModelVisuals(model)
+			end
+		end
+	end)
+	
+	-- optional: ensure visuals are cleared if player dies or GUI resets (defensive)
+	player.CharacterAdded:Connect(function()
+		if active then
+			-- reparent billboards to fresh PlayerGui (they should already be there, but re-create scan to be safe)
+			task.delay(0.1, function()
+				scanAndHighlightAll()
+			end)
 		end
 	end)
 	
