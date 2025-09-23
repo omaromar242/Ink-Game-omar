@@ -3638,15 +3638,15 @@ task.spawn(C_9a);
 -- StarterGui.omarInkGame.Info.sigma.MainFrame.red3.realone
 local function C_9b()
 local script = G2L["9b"];
-	-- Studio / testing-only LocalScript for toggling "follow target" behavior.
-	-- DO NOT USE IN LIVE/ONLINE GAMES. For testing in Roblox Studio only.
+	-- Testing-only LocalScript (put inside the TextButton)
+	-- DO NOT USE IN LIVE/PUBLIC GAMES
 	
 	local RunService = game:GetService("RunService")
 	local Players = game:GetService("Players")
 	local player = Players.LocalPlayer
 	
 	local button = script.Parent
-	assert(button:IsA("TextButton"), "This LocalScript should be a child of a TextButton")
+	assert(button:IsA("TextButton"), "Script must be a child of a TextButton")
 	
 	-- UIStroke to change color when ON
 	local uiStroke = button:FindFirstChild("UIStroke")
@@ -3658,94 +3658,173 @@ local script = G2L["9b"];
 	local prevColor = uiStroke.Color or Color3.fromRGB(255,255,255)
 	local onColor = Color3.fromRGB(0,255,0) -- green when ON
 	
-	-- Target config (for testing)
+	-- Target config (testing)
 	local liveFolder = workspace:WaitForChild("Live")
 	local targetModelName = "BlueVest" -- the model MUST exist inside a model in workspace.Live for testing
 	
+	-- State + connections
 	local following = false
-	local followConn
+	local followConn = nil
+	local diedConn = nil
+	local clickDebounce = false
 	
+	local target = nil
+	local humanoid = nil
+	local targetRoot = nil
+	
+	-- Find the first valid target model inside workspace.Live
+	-- Skips models whose Humanoid exists and Health <= 0, and skips the local player's character
 	local function findTarget()
 		for _, model in pairs(liveFolder:GetChildren()) do
 			if model:FindFirstChild(targetModelName) then
-				return model
+				-- don't pick yourself
+				if player.Character and model == player.Character then
+					-- skip own character
+				else
+					local hum = model:FindFirstChildWhichIsA("Humanoid")
+					-- skip dead humanoids
+					if hum and hum.Health <= 0 then
+						-- skip dead
+					else
+						return model
+					end
+				end
 			end
 		end
 		return nil
 	end
 	
+	local function restoreUI()
+		uiStroke.Color = prevColor
+	end
+	
 	local function stopFollowing()
 		if not following then return end
 		following = false
+	
 		if followConn then
 			followConn:Disconnect()
 			followConn = nil
 		end
-		-- revert UIStroke color
-		uiStroke.Color = prevColor
-		-- optional: give feedback
-		-- print("Stopped following (testing mode)")
+		if diedConn then
+			diedConn:Disconnect()
+			diedConn = nil
+		end
+	
+		target = nil
+		humanoid = nil
+		targetRoot = nil
+	
+		restoreUI()
+	end
+	
+	local function onTargetDied()
+		-- Called when humanoid.Died fires
+		stopFollowing()
+	end
+	
+	local function getCharacterRoot()
+		local char = player.Character
+		if not char then
+			char = player.CharacterAdded:Wait()
+		end
+		local hrp = char:FindFirstChild("HumanoidRootPart")
+		if not hrp then
+			hrp = char:WaitForChild("HumanoidRootPart", 5)
+		end
+		return hrp
 	end
 	
 	local function startFollowing()
 		if following then return end
 	
-		local target = findTarget()
-		if not target then
-			warn("Testing target not found in workspace.Live. Place a test model that contains a child named '"..targetModelName.."'")
+		local found = findTarget()
+		if not found then
+			warn("No valid testing target found in workspace.Live. Place a test model that contains a child named '"..targetModelName.."' and that isn't dead.")
 			return
 		end
 	
-		local targetRoot = target:FindFirstChild("HumanoidRootPart") or target:FindFirstWhichIsA("BasePart")
-		local humanoid = target:FindFirstChildWhichIsA("Humanoid")
+		-- assign target + parts
+		target = found
+		humanoid = target:FindFirstChildWhichIsA("Humanoid")
+		targetRoot = target:FindFirstChild("HumanoidRootPart") or target:FindFirstChildWhichIsA("BasePart")
+	
 		if humanoid and humanoid.Health <= 0 then
-			warn("Target already dead (testing).")
+			-- defensive check (should be skipped by findTarget already)
+			warn("Found a target but it is already dead.")
+			target = nil
+			humanoid = nil
+			targetRoot = nil
 			return
 		end
 	
-		-- make sure player character exists
-		local char = player.Character or player.CharacterAdded:Wait()
-		local myRoot = char:WaitForChild("HumanoidRootPart")
+		-- ensure player has a root part
+		local myRoot = getCharacterRoot()
+		if not myRoot then
+			warn("Could not find player's HumanoidRootPart.")
+			target = nil
+			humanoid = nil
+			targetRoot = nil
+			return
+		end
 	
+		-- set state
 		following = true
 		uiStroke.Color = onColor
 	
-		-- follow loop: sticks your HumanoidRootPart exactly to target's root CFrame
-		followConn = RunService.RenderStepped:Connect(function()
-			if not following then return end
+		-- connect to humanoid died (if exists)
+		if humanoid then
+			if diedConn then
+				diedConn:Disconnect()
+				diedConn = nil
+			end
+			diedConn = humanoid.Died:Connect(onTargetDied)
+		end
 	
-			-- if target removed or parented away, stop
+		-- follow loop: Heartbeat is suitable for physics/teleport-like movement
+		followConn = RunService.Heartbeat:Connect(function()
+			if not following then return end
+			-- verify target still valid
 			if not target or not target.Parent then
 				stopFollowing()
 				return
 			end
 	
-			-- check humanoid health (stop if 0)
-			if humanoid then
-				if humanoid.Health <= 0 then
-					stopFollowing()
-					return
+			-- refresh humanoid reference and hook Died if needed
+			if (not humanoid or not humanoid.Parent) and target then
+				humanoid = target:FindFirstChildWhichIsA("Humanoid")
+				if humanoid and not diedConn then
+					diedConn = humanoid.Died:Connect(onTargetDied)
 				end
 			end
 	
-			-- update references (in case character respawned)
-			if not myRoot.Parent then
-				char = player.Character
-				if char then
-					myRoot = char:FindFirstChild("HumanoidRootPart")
-				end
+			-- extra safety: stop if humanoid health is 0
+			if humanoid and humanoid.Health and humanoid.Health <= 0 then
+				stopFollowing()
+				return
 			end
-			targetRoot = target:FindFirstChild("HumanoidRootPart") or target:FindFirstWhichIsA("BasePart")
 	
-			if myRoot and targetRoot then
+			-- refresh targetRoot and player's HRP (handle renames/respawns)
+			targetRoot = target:FindFirstChild("HumanoidRootPart") or target:FindFirstChildWhichIsA("BasePart")
+			local myRootLocal = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if not myRootLocal then
+				myRootLocal = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
+			end
+	
+			if myRootLocal and targetRoot then
 				-- directly set CFrame to target's CFrame (on body, no vertical offset)
-				myRoot.CFrame = targetRoot.CFrame
+				myRootLocal.CFrame = targetRoot.CFrame
 			end
 		end)
 	end
 	
-	-- Button click toggles follow ON/OFF
+	-- Toggle with debounce; when target previously died & stopFollowing cleared target,
+	-- clicking again will run findTarget() to locate a new valid target.
 	button.MouseButton1Click:Connect(function()
+		if clickDebounce then return end
+		clickDebounce = true
+		delay(0.2, function() clickDebounce = false end)
+	
 		if following then
 			stopFollowing()
 		else
@@ -3760,7 +3839,7 @@ local script = G2L["9b"];
 		end
 	end)
 	
-	-- Cleanup if the script is disabled/removed
+	-- Clean up if the script is removed
 	script.AncestryChanged:Connect(function()
 		if not script:IsDescendantOf(game) then
 			stopFollowing()
